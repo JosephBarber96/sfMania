@@ -6,6 +6,7 @@
 
 class SongInfoBox;
 class SongPanel;
+class BeatmapDifficultyPanel;
 
 enum eScrollDir
 {
@@ -33,6 +34,7 @@ public:
 private:
 	// Displays
 	std::vector<SongPanel*> m_songPanels;
+	std::vector<BeatmapDifficultyPanel*> m_difficultyPanels;
 	SongInfoBox* m_songInfoBox;
 	sf::Texture* m_backgroundTexture;
 	sf::Sprite* m_backgroundSprite;
@@ -42,6 +44,7 @@ private:
 	// Song
 	int m_currentSongIndex;
 	int m_targetScrollIndex;	// Index we will be at after scrolling
+	int m_currentDifficultyIndex;
 
 	// Scrolling
 	bool m_scrolling;
@@ -53,7 +56,7 @@ private:
 
 	// Static const
 	static const int BANNER_WIDTH = 400;
-	static const int SONG_INFOBOX_HEIGHT = 250;
+	static const int SONG_INFOBOX_HEIGHT = 205;
 	static const int SONG_PANEL_WIDTH = 400;
 	static const int SONG_PANEL_HEIGHT = 100;
 };

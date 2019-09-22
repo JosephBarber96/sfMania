@@ -146,6 +146,7 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="SettingsScene.cpp" />
     <ClCompile Include="Song.cpp" />
+    <ClCompile Include="BeatmapDifficultyPanel.cpp" />
     <ClCompile Include="SongInfoBox.cpp" />
     <ClCompile Include="SongPanel.cpp" />
     <ClCompile Include="SongSelectScene.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SettingsScene.h" />
     <ClInclude Include="Song.h" />
+    <ClInclude Include="BeatmapDifficultyPanel.h" />
     <ClInclude Include="SongInfoBox.h" />
     <ClInclude Include="SongPanel.h" />
     <ClInclude Include="SongSelectScene.h" />

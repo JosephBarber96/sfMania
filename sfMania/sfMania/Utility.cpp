@@ -12,6 +12,7 @@
 #include "Measure.h"
 #include "BPM.h"
 #include "Settings.h"
+#include "ResourceManager.h"
 
 namespace Utility
 {
@@ -66,6 +67,11 @@ namespace Utility
 		float half_width = text->getGlobalBounds().width / 2.0f;
 		float half_height = text->getGlobalBounds().height / 2.0f;
 		return sf::Vector2f(targetX + half_width, targetY + half_height);
+	}
+
+	void SetupText(sf::Text* text, eFont font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x, int y)
+	{
+		SetupText(text, ResourceManager::GetFont(font), textString, size, fillColour, outlineColour, outlineThickness, x, y);
 	}
 
 	void SetupText(sf::Text* text, sf::Font* font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x, int y)
@@ -280,6 +286,8 @@ namespace Utility
 							// Difficulty name
 						case 2:
 							stepMap->m_difficultyName = currentLine;
+							while (stepMap->m_difficultyName[0] == ' ')
+								stepMap->m_difficultyName.erase(stepMap->m_difficultyName.begin());
 							break;
 
 							// Numerical difficulty

@@ -7,6 +7,7 @@
 
 class Song;
 enum eResolution;
+enum eFont;
 
 namespace Utility
 {
@@ -17,6 +18,7 @@ namespace Utility
 	sf::Vector2f GetScaleForTargetSize(sf::Texture * tex, float targetWidth, float targetHeight);
 	sf::Vector2f GetScreenPosForTextForNormalizedScreenCoordinate(sf::Text* text, float normalizedX, float normalizedY);
 	float GetXForText(sf::Text* text, float x);
+	void SetupText(sf::Text* text, eFont font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x = 0, int y = 0);
 	void SetupText(sf::Text* text, sf::Font* font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x = 0, int y = 0);
 	sf::Color UnhighlightedColour();
 	sf::Color HighlightedColour();

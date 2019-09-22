@@ -20,12 +20,14 @@ public:
 	void Run();
 
 	// Static behaviour
-	static void SetChosenSong(Song* song) { instance->m_currentlyChosenSong = song; }
+	static void SetChosenSong(Song* song, int difficulty) 
+	{ instance->m_currentlyChosenSong = song; instance->m_currentlyChosenDifficulty = difficulty; }
 	static void ChangeScene(eScenes p_newState);
 
 	// Getters
 	static float DeltaTime() { return m_deltaTime; }
 	static Song* GetCurrentSong() { return instance->m_currentlyChosenSong; }
+	static int GetCurrentChosenDifficulty() { return instance->m_currentlyChosenDifficulty; }
 
 private:
 
@@ -55,6 +57,7 @@ private:
 	// Game-State
 	Scene* m_currentScene;
 	Song* m_currentlyChosenSong;
+	int m_currentlyChosenDifficulty;
 
 	// Scene changing
 	eScenes m_scene;

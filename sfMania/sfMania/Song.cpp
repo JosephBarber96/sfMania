@@ -50,9 +50,14 @@ void Song::AddBpm(BPM* bpm)
 
 // Reading info
 
-StepMap* Song::GetStepmap(int difficulty) const
+int Song::StepmapCount() const
 {
-	return m_stepMaps[difficulty];
+	return m_stepMaps.size();
+}
+
+StepMap* Song::GetStepmap(int index) const
+{
+	return m_stepMaps[index];
 }
 
 BPM* Song::GetBpmForBeat(int beat) const

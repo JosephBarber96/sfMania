@@ -63,12 +63,11 @@ void GameplayScene::InitScene()
 	// Init music
 	m_songMusic = new sf::Music();
 
-	// Init notes
+	// Init notes pool
 	for (int i = 0; i < 50; i++)
 	{
 		m_notes.push_back(new Note());
-		m_longNotes.push_back(new LongNote());
-			
+		m_longNotes.push_back(new LongNote());		
 	}
 	m_currentNoteIndex = 0;
 	m_currentLongnoteIndex = 0;
@@ -329,7 +328,7 @@ void GameplayScene::AlertNoteMissed()
 
 void GameplayScene::PlayNotes()
 {
-	StepMap* stepmap = m_currentSong->GetStepmap(0);
+	StepMap* stepmap = m_currentSong->GetStepmap(GameManager::GetCurrentChosenDifficulty());
 
 	// INFORMATION
 	/*

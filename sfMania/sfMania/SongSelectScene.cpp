@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 
 #include "Utility.h"
 
@@ -11,6 +12,7 @@
 #include "SongPanel.h"
 #include "Song.h"
 #include "Settings.h"
+#include "BeatmapDifficultyPanel.h"
 
 SongSelectScene::SongSelectScene()
 {
@@ -79,6 +81,9 @@ void SongSelectScene::InitScene()
 		m_songPanels.push_back(panel);
 	}
 
+	// Setup beatmap panels
+	m_difficultyPanels = std::vector<BeatmapDifficultyPanel*>();
+
 	// Load song info
 	LoadInfoForSong();
 }
@@ -93,6 +98,10 @@ void SongSelectScene::UnloadScene()
 	for (int i = 0; i < m_songPanels.size(); i++)
 	{
 		delete m_songPanels[i];
+	}
+	for (int i = 0; i < m_difficultyPanels.size(); i++)
+	{
+		delete m_difficultyPanels[i];
 	}
 }
 
@@ -126,10 +135,30 @@ void SongSelectScene::UpdateScene()
 		}
 	}
 
+	//Difficulty select
+	if (Input::Up.m_keyPressed)
+	{
+		if (m_currentDifficultyIndex > 0)
+		{
+			m_difficultyPanels[m_currentDifficultyIndex]->UnHighlight();
+			m_currentDifficultyIndex--;
+			m_difficultyPanels[m_currentDifficultyIndex]->Highlight();
+		}
+	}
+	else if (Input::Down.m_keyPressed)
+	{
+		if (m_currentDifficultyIndex < m_difficultyPanels.size() - 1)
+		{
+			m_difficultyPanels[m_currentDifficultyIndex]->UnHighlight();
+			m_currentDifficultyIndex++;
+			m_difficultyPanels[m_currentDifficultyIndex]->Highlight();
+		}
+	}
+
 	// Select
 	if (Input::Enter.m_keyPressed)
 	{
-		GameManager::SetChosenSong(Song::GetSong(m_currentSongIndex));
+		GameManager::SetChosenSong(Song::GetSong(m_currentSongIndex), m_currentDifficultyIndex);
 		GameManager::ChangeScene(eScenes::playingSong);
 	}
 
@@ -155,6 +184,11 @@ void SongSelectScene::RenderScene(sf::RenderWindow* window)
 	for (int i = 0; i < m_songPanels.size(); i++)
 	{
 		m_songPanels[i]->RenderSelf(window);
+	}
+
+	for (int i = 0; i < m_difficultyPanels.size(); i++)
+	{
+		m_difficultyPanels[i]->RenderSelf(window);
 	}
 }
 
@@ -215,4 +249,28 @@ void SongSelectScene::LoadInfoForSong()
 	sb_y = m_bannerSprite->getPosition().y + m_bannerSprite->getGlobalBounds().height + 5;
 	m_songInfoBox->SetPosition(sb_x, sb_y);
 	m_songInfoBox->UpdateInformation(currentSong);
+
+	// Delete current difficulty panels and create new ones
+	for (BeatmapDifficultyPanel* panel : m_difficultyPanels)
+	{
+		delete panel;
+	}
+	m_difficultyPanels.clear();
+
+	int padding = 5;
+	int diffPanelHeight = 45;
+	int panel_y = sb_y + SONG_INFOBOX_HEIGHT + padding;
+	for (int i = 0; i < currentSong->StepmapCount(); i++)
+	{
+		BeatmapDifficultyPanel* panel = new BeatmapDifficultyPanel();
+		panel->SetSize(BANNER_WIDTH, diffPanelHeight);
+		panel->SetPosition(sb_x, panel_y + padding * i + diffPanelHeight * i);
+		panel->SetOutlineColour(sf::Color::Black);
+		panel->SetOutlineThickness(3);
+		panel->SetFillColour(Utility::UnhighlightedColour());
+		panel->SetInfo(currentSong->GetStepmap(i));
+		m_difficultyPanels.push_back(panel);
+	}
+	m_difficultyPanels[0]->Highlight();
+	m_currentDifficultyIndex = 0;
 }

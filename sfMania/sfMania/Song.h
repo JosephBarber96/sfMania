@@ -29,6 +29,7 @@ public:
 	void AddBpm(BPM* bpm);
 
 	// Getting Info
+	int StepmapCount() const;
 	StepMap* GetStepmap(int difficulty) const;
 	BPM* GetBpmForBeat(int beat) const;
 	float GetMinBpm() const;
