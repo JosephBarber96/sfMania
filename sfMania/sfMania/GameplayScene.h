@@ -13,6 +13,8 @@ class Score;
 class Receptor;
 class Note;
 class LongNote;
+class StepMap;
+class Measure;
 enum eHit;
 
 enum eLeaveSongReason
@@ -41,6 +43,12 @@ public:
 private:
 
 	// GameplayScene methods
+	//
+	// Update functions
+	void UpdateReceptorInput();
+	void UpdateSongAndNotes();
+	void UpdateComboText();
+	// Other
 	void PlayNotes();
 	void DropNote(int column);
 	LongNote* DropLongNote(int column);
@@ -49,6 +57,7 @@ private:
 	void NoteMissed();
 	void UpdateText(eHit hit);
 	void LeaveScene(eLeaveSongReason reason);
+
 	static float GetXForColumn(int col);
 
 	// Song components
@@ -60,7 +69,24 @@ private:
 	std::thread m_musicThread;
 
 	// Song logic
-	bool m_terminateSong;
+	bool m_songPlaying;
+	bool m_init;
+	bool m_endOfNotes;
+
+	int m_curMeasureIndex;
+	int m_curLineIndex;
+	Measure* m_curMeasure;
+	int m_currentBeat;
+
+	int m_curBeatLine;
+	int m_linesPerBeat;
+	float m_currentBpm;
+
+	float m_initialNoteDelay;
+	float m_initialSongDelay;
+	float m_nextLineDelay;
+
+	StepMap* m_stepMap;
 	eLeaveSongReason m_leaveReason;
 	
 

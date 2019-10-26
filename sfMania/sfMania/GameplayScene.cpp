@@ -22,6 +22,30 @@
 #include "Note.h"
 #include "LongNote.h"
 
+// INFORMATION
+/*
+1 Measure = 4 beats.
+
+Therefore, a 4 measure is 4 beats:
+0000 <- 1
+0000 <- 2
+0000 <- 3
+0000 <- 4
+
+An 8 measure is still 4 beats long
+0000 <- 1
+0000
+0000 <- 2
+0000
+0000 <- 3
+0000
+0000 <- 4
+0000
+
+These are the beats that BPM changes occur on, so this is
+how we calculate what beat we're currently on.
+*/
+
 
 GameplayScene::GameplayScene()
 {
@@ -124,8 +148,10 @@ void GameplayScene::InitScene()
 		m_targetComboExpandTime = 0.15f;
 	}
 
+	// Vars
+	m_songPlaying = false;
 
-	m_musicThread = std::thread(&GameplayScene::Play, this);
+	Play();
 }
 
 void GameplayScene::UnloadScene()
@@ -156,56 +182,12 @@ void GameplayScene::UnloadScene()
 
 void GameplayScene::UpdateScene()
 {
-	// Receptor pressed
-	if (Input::W.m_keyPressed)
+	if (m_songPlaying)
 	{
-		CheckForHit(0);
-		m_receptorLeft->Pressed();
-	}
-	if (Input::E.m_keyPressed)
-	{
-		CheckForHit(1);
-		m_receptorLeftMid->Pressed();
-	}
-	if (Input::I.m_keyPressed)
-	{
-		CheckForHit(2);
-		m_receptorRightMid->Pressed();
-	}	
-	if (Input::O.m_keyPressed)
-	{
-		CheckForHit(3);
-		m_receptorRight->Pressed();
-	}
-		
-
-	// Receptor released
-	if (Input::W.m_keyReleased)
-		m_receptorLeft->Released();
-	if (Input::E.m_keyReleased)
-		m_receptorLeftMid->Released();
-	if (Input::I.m_keyReleased)
-		m_receptorRightMid->Released();
-	if (Input::O.m_keyReleased)
-		m_receptorRight->Released();
-
-
-	// Update text
-	if (m_expandCombo)
-	{
-		// Time, normalized
-		m_elapsedComboExpandTime += GameManager::DeltaTime();
-		float normalized = m_elapsedComboExpandTime / m_targetComboExpandTime;
-		normalized = Maths::Clamp(normalized, 0, 1);
-
-		// Set text
-		float scale = Maths::Unnormalize(normalized, 1.15f, 1.0f);
-		m_comboText->setScale(scale, scale);
-		m_hitText->setScale(scale, scale);
-
-		// End catch
-		if (normalized >= 1)
-			m_expandCombo = false;
+		UpdateReceptorInput();
+		if (!m_endOfNotes)
+			UpdateSongAndNotes();
+		UpdateComboText();
 	}
 
 	// Quit
@@ -260,22 +242,31 @@ void GameplayScene::Play()
 		std::cout << "ERROR: Cannot load song from file." << std::endl;
 	}
 
+	m_currentBeat = 0;
+	m_curMeasureIndex = 0;
+	m_curLineIndex = 0;
+	m_currentBpm = 0;
+	m_nextLineDelay = 0;
+	m_stepMap = m_currentSong->GetStepmap(GameManager::GetCurrentChosenDifficulty());
+
+	// Init var info
+	m_curBeatLine = 0;
+	int numberOfLines = m_stepMap->GetMeasure(m_curMeasureIndex)->LineCount();
+	m_linesPerBeat = numberOfLines / 4;
+
 	// Calculate offset
-	float songOffset = m_currentSong->m_offset * 1000;
-	float noteOffset = Settings::FallTime() * 1000;
+	float songOffset = m_currentSong->m_offset;
+	float noteOffset = Settings::FallTime();
 	
 	// Case 0: Positive or 0 offset
 	if (songOffset >= 0)
 	{
 		float newOffset = songOffset + noteOffset;
 
-		// Notes
-		m_noteThread = std::thread(&GameplayScene::PlayNotes, this);
-		m_noteThread.detach();
-		// Wait
-		std::this_thread::sleep_for(std::chrono::milliseconds(long long(newOffset)));
-		// Song
-		m_songMusic->play();
+		// Play notes straight away
+		m_initialNoteDelay = 0;
+		// Wait before song
+		m_initialSongDelay = newOffset;
 	}
 
 	// Case 1: 
@@ -288,13 +279,10 @@ void GameplayScene::Play()
 		// It now occurs before the song
 		float newOffset = noteOffset - fabsf(songOffset);
 
-		// Notes
-		m_noteThread = std::thread(&GameplayScene::PlayNotes, this);
-		m_noteThread.detach();
-		// Wait
-		std::this_thread::sleep_for(std::chrono::milliseconds(long long(newOffset)));
-		// Song
-		m_songMusic->play();
+		// Play notes straight away
+		m_initialNoteDelay = 0;
+		// Wait before song
+		m_initialSongDelay = newOffset;
 	}
 
 	// Case 2:
@@ -305,17 +293,16 @@ void GameplayScene::Play()
 	{
 		float newOffset = (fabsf(songOffset)) - noteOffset;
 
-		// Song
+		// Play song straight away
+		m_initialSongDelay = 0;
 		m_songMusic->play();
-		// Wait
-		std::this_thread::sleep_for(std::chrono::milliseconds(long long(newOffset)));
-		// Notes
-		m_noteThread = std::thread(&GameplayScene::PlayNotes, this);
-		m_noteThread.detach();
+		// Wait before notes
+		m_initialNoteDelay = newOffset;
 	}
 
 	// Init playing
-	m_terminateSong = false;
+	m_songPlaying = true;
+	m_endOfNotes = false;
 }
 
 void GameplayScene::AlertNoteMissed()
@@ -326,121 +313,184 @@ void GameplayScene::AlertNoteMissed()
 
 // Private
 
-void GameplayScene::PlayNotes()
+void GameplayScene::UpdateReceptorInput()
 {
-	StepMap* stepmap = m_currentSong->GetStepmap(GameManager::GetCurrentChosenDifficulty());
-
-	// INFORMATION
-	/*
-	1 Measure = 4 beats.
-
-	Therefore, a 4 measure is 4 beats:
-	0000 <- 1
-	0000 <- 2
-	0000 <- 3
-	0000 <- 4
-
-	An 8 measure is still 4 beats long
-	0000 <- 1
-	0000
-	0000 <- 2
-	0000
-	0000 <- 3
-	0000
-	0000 <- 4
-	0000
-
-	These are the beats that BPM changes occur on, so this is 
-	how we calculate what beat we're currently on.
-	*/
-
-	int currentBeat = 0;
-
-	float current_bpm = -1;
-	float current_wait = -1;
-
-	for (const Measure* measure : stepmap->GetMeasures())
+	// Receptor pressed
+	if (Input::W.m_keyPressed)
 	{
-		// Every {linesPerBeat} number of lines, we count beatCount++;
-		int lineCount = 0;
-		int numberOfLines = measure->LineCount();
-		int linesPerBeat = numberOfLines / 4;	
+		CheckForHit(0);
+		m_receptorLeft->Pressed();
+	}
+	if (Input::E.m_keyPressed)
+	{
+		CheckForHit(1);
+		m_receptorLeftMid->Pressed();
+	}
+	if (Input::I.m_keyPressed)
+	{
+		CheckForHit(2);
+		m_receptorRightMid->Pressed();
+	}
+	if (Input::O.m_keyPressed)
+	{
+		CheckForHit(3);
+		m_receptorRight->Pressed();
+	}
 
-		for (const Line* line : measure->GetLines())
+
+	// Receptor released
+	if (Input::W.m_keyReleased)
+		m_receptorLeft->Released();
+	if (Input::E.m_keyReleased)
+		m_receptorLeftMid->Released();
+	if (Input::I.m_keyReleased)
+		m_receptorRightMid->Released();
+	if (Input::O.m_keyReleased)
+		m_receptorRight->Released();
+}
+
+void GameplayScene::UpdateSongAndNotes()
+{
+	float delta = GameManager::DeltaTime();
+
+	// Play music
+	if (m_initialSongDelay <= 0 && m_songMusic->getStatus() != sf::SoundSource::Status::Playing)
+	{
+		m_songMusic->play();
+	}
+
+	// Can play notes
+	if (m_initialNoteDelay <= 0)
+	{
+		if (!m_init)
 		{
-			// Count beats
-			if (lineCount = linesPerBeat - 1)
-			{
-				lineCount = 0;
-				currentBeat++;
-			}
-			lineCount++;
+			m_curMeasureIndex = 0;
+			m_curMeasure = m_stepMap->GetMeasure(m_curMeasureIndex);
+			m_curLineIndex = 0;
+			m_curBeatLine = 0;
+			m_currentBpm = -1;
 
-			// For each column of the line
+			m_nextLineDelay = 0;
+
+			m_init = true;
+		}
+
+		if (m_init && m_curMeasure == nullptr)
+			return;
+
+		// Time has passed for the next notes to fall
+		if (m_init && m_nextLineDelay <= 0)
+		{
+			float difference = (0 + m_nextLineDelay);
+
+			// Drop notes for each column
 			for (int i = 0; i < 4; i++)
 			{
-				if (m_terminateSong) { return; }				
-
-				// Handle Note
-				switch (line->GetChar(i))
+				switch (m_curMeasure->GetLine(m_curLineIndex)->GetChar(i))
 				{
 					// Regular arrow
 				case '1':
 					DropNote(i);
 					break;
 
-					// Long head
+					// Long-note head
 				case '2':
-					// For now, treat rolls as long notes
+					// FGor now, treat rolls as long notes
 				case '4':
 					m_activeLongNotes[i] = DropLongNote(i);
 					break;
 
-					// Long tail
+					// Long-note tail
 				case '3':
 					m_activeLongNotes[i]->EndTail();
 					break;
 				}
 			}
 
+			// Go to next line
+			m_curLineIndex++;			
+
+			// Go to next measure?
+			if (m_curLineIndex >= m_stepMap->GetMeasure(m_curMeasureIndex)->LineCount())
+			{
+				m_curLineIndex = 0;
+				m_curMeasureIndex++;
+				m_curMeasure = m_stepMap->GetMeasure(m_curMeasureIndex);
+				if (m_curMeasure == nullptr)
+				{
+					m_endOfNotes = true;
+					return;
+				}
+
+				// Every {linesPerBeat} number of lines, we count beatCount++;
+				m_curBeatLine = 0;
+				int numberOfLines = m_stepMap->GetMeasure(m_curMeasureIndex)->LineCount();
+				m_linesPerBeat = numberOfLines / 4;
+			}
+			// Else, on line increment
+			else
+			{
+				// Count lines per beat, move onto next beat if need to			
+				if (m_curBeatLine == m_linesPerBeat - 1)
+				{
+					m_curBeatLine = 0;
+					m_currentBeat++;
+				}
+				m_curBeatLine++;
+			}
+
 			// Calculate how long we have to wait { at the current BPM and Measure }
 			// untill we process the next line
 			{
 				// BPM of current beat
-				float bpm = m_currentSong->GetBpmForBeat(currentBeat)->Bpm();
-				if (current_bpm != bpm)
+				float bpm = m_currentSong->GetBpmForBeat(m_currentBeat)->Bpm();
+				if (m_currentBpm != bpm)
 				{
-					current_bpm = bpm;
-					std::cout << "Switching to " << current_bpm << " bpm!" << std::endl;
+					m_currentBpm = bpm;
+					std::cout << "Switching to " << m_currentBpm << " bpm!" << std::endl;
 				}
 
 				// Beats per sec
-				float current_bps = current_bpm / 60;
-
-				// time in ms
-				float seconds_in_ms = 1000;
+				float current_bps = m_currentBpm / 60;
 
 				// how long between each hit
-				float current_wait_time = seconds_in_ms / current_bps;
+				float current_wait_time = 1.0f / current_bps;
 
 				// hits per metrinome
-				float hits_per_bpm = linesPerBeat;
+				float hits_per_bpm = m_linesPerBeat;
 
 				// wait pet beat
 				float wait_time_per_beat = current_wait_time / hits_per_bpm;
 
-				current_wait = wait_time_per_beat;
-
-				// Wait
-				std::this_thread::sleep_for(std::chrono::milliseconds(long long(current_wait)));
+				m_nextLineDelay = wait_time_per_beat - difference;
 			}
 		}
+		m_nextLineDelay -= delta;
 	}
+	
+	m_initialNoteDelay -= delta;
+	m_initialSongDelay -= delta;
+}
 
-	std::cout << "Song done!" << std::endl;
-	LeaveScene(eLeaveSongReason::songEnd);
+void GameplayScene::UpdateComboText()
+{
+	// Update text
+	if (m_expandCombo)
+	{
+		// Time, normalized
+		m_elapsedComboExpandTime += GameManager::DeltaTime();
+		float normalized = m_elapsedComboExpandTime / m_targetComboExpandTime;
+		normalized = Maths::Clamp(normalized, 0, 1);
 
-	// std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		// Set text
+		float scale = Maths::Unnormalize(normalized, 1.15f, 1.0f);
+		m_comboText->setScale(scale, scale);
+		m_hitText->setScale(scale, scale);
+
+		// End catch
+		if (normalized >= 1)
+			m_expandCombo = false;
+	}
 }
 
 void GameplayScene::DropNote(int column)
@@ -572,7 +622,7 @@ void GameplayScene::LeaveScene(eLeaveSongReason reason)
 {
 	// Set vars
 	m_leaveReason = reason;
-	m_terminateSong = true;
+	m_songPlaying = false;
 
 	// Stop the music
 	m_songMusic->stop();

@@ -19,6 +19,7 @@ public:
 	void AddMeasure(Measure* measure);
 
 	std::vector<Measure*> GetMeasures() const { return m_measures; }
+	Measure* GetMeasure(int i) const;
 
 private:
 	std::vector<Measure*> m_measures;
