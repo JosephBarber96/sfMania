@@ -70,6 +70,7 @@ void GameplayScene::InitScene()
 {
 	// Init vars
 	m_score = new Score();
+	m_paused = false;
 
 	// Get song
 	m_currentSong = GameManager::GetCurrentSong();
@@ -178,21 +179,34 @@ void GameplayScene::UnloadScene()
 	delete m_comboText;
 	if (m_leaveReason == eLeaveSongReason::quit)
 		delete m_score;
+
+	// Reset vars
+	m_paused = false;
 }
 
 void GameplayScene::UpdateScene()
 {
-	if (m_songPlaying)
+	if (!m_paused)
 	{
-		UpdateReceptorInput();
-		if (!m_endOfNotes)
-			UpdateSongAndNotes();
-		UpdateComboText();
+		if (m_songPlaying)
+		{
+			UpdateReceptorInput();
+			if (!m_endOfNotes)
+				UpdateSongAndNotes();
+			UpdateComboText();
+		}
 	}
+	else
+	{
+		UpdatePaused();
+	}
+
 
 	// Quit
 	if (Input::Esc.m_keyPressed)
-		LeaveScene(eLeaveSongReason::songEnd);
+	{
+		TogglePause();
+	}
 }
 
 void GameplayScene::RenderScene(sf::RenderWindow * window)
@@ -257,10 +271,42 @@ void GameplayScene::Play()
 	// Calculate offset
 	float songOffset = m_currentSong->m_offset;
 	float noteOffset = Settings::FallTime();
+
+	//float finalOffset = songOffset - noteOffset;
+
+	//// Offset 0, song and note at same time
+	//if (finalOffset == 0)
+	//{
+	//	m_initialSongDelay = 0;
+	//	m_initialNoteDelay = 0;
+	//}
+	//// Offset -0.1, noteData starts 0.1 before song
+	//else if (finalOffset < 0)
+	//{
+	//	m_initialSongDelay = finalOffset;
+	//	m_initialNoteDelay = 0;
+	//}
+	//// Offset 0.1, notedata starts 0.1 after song
+	//else if (finalOffset > 0)
+	//{
+	//	m_initialSongDelay = 0;
+	//	m_initialNoteDelay = finalOffset;
+	//}
+
+	//// Init playing
+	//m_songPlaying = true;
+	//m_endOfNotes = false;
+	//m_songStarted = false;
+
+
+	//return;
+
+	// Old -V
 	
 	// Case 0: Positive or 0 offset
 	if (songOffset >= 0)
 	{
+		std::cout << "Case 0:" << std::endl;
 		float newOffset = songOffset + noteOffset;
 
 		// Play notes straight away
@@ -275,6 +321,7 @@ void GameplayScene::Play()
 	// Therefore: noteOffset - abs(songOffet) > 0
 	if (songOffset < 0 && noteOffset > fabsf(songOffset))
 	{
+		std::cout << "Case 1:" << std::endl;
 		// Instead of having beat0 occur after the song
 		// It now occurs before the song
 		float newOffset = noteOffset - fabsf(songOffset);
@@ -291,11 +338,11 @@ void GameplayScene::Play()
 	// Therefore: noteOffset - abs(songOffset) < 0
 	else if (songOffset < 0 && noteOffset < fabsf(songOffset))
 	{
+		std::cout << "Case 2:" << std::endl;
 		float newOffset = (fabsf(songOffset)) - noteOffset;
 
 		// Play song straight away
 		m_initialSongDelay = 0;
-		m_songMusic->play();
 		// Wait before notes
 		m_initialNoteDelay = newOffset;
 	}
@@ -303,6 +350,7 @@ void GameplayScene::Play()
 	// Init playing
 	m_songPlaying = true;
 	m_endOfNotes = false;
+	m_songStarted = false;
 }
 
 void GameplayScene::AlertNoteMissed()
@@ -354,8 +402,9 @@ void GameplayScene::UpdateSongAndNotes()
 	float delta = GameManager::DeltaTime();
 
 	// Play music
-	if (m_initialSongDelay <= 0 && m_songMusic->getStatus() != sf::SoundSource::Status::Playing)
+	if (m_initialSongDelay <= 0 && !m_songStarted)
 	{
+		m_songStarted = true;
 		m_songMusic->play();
 	}
 
@@ -379,10 +428,8 @@ void GameplayScene::UpdateSongAndNotes()
 			return;
 
 		// Time has passed for the next notes to fall
-		if (m_init && m_nextLineDelay <= 0)
+		if (m_init && m_elapsedSongTime >= m_nextNoteDropTime)
 		{
-			float difference = (0 + m_nextLineDelay);
-
 			// Drop notes for each column
 			for (int i = 0; i < 4; i++)
 			{
@@ -462,10 +509,10 @@ void GameplayScene::UpdateSongAndNotes()
 				// wait pet beat
 				float wait_time_per_beat = current_wait_time / hits_per_bpm;
 
-				m_nextLineDelay = wait_time_per_beat - difference;
+				m_nextNoteDropTime = m_elapsedSongTime + wait_time_per_beat;
 			}
 		}
-		m_nextLineDelay -= delta;
+		m_elapsedSongTime += delta;
 	}
 	
 	m_initialNoteDelay -= delta;
@@ -617,6 +664,28 @@ void GameplayScene::UpdateText(eHit hit)
 	m_elapsedComboExpandTime = 0.0f;
 }
 
+void GameplayScene::TogglePause()
+{
+	// Pause
+	if (!m_paused)
+	{
+		std::cout << "Paused." << std::endl;
+		m_paused = true;
+		m_songMusic->pause();
+	}
+	// Unpause
+	else
+	{
+		std::cout << "Unpaused." << std::endl;
+		m_paused = false;
+		m_songMusic->play();
+	}
+}
+
+void GameplayScene::UpdatePaused()
+{
+
+}
 
 void GameplayScene::LeaveScene(eLeaveSongReason reason)
 {

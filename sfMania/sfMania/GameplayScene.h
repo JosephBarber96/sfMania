@@ -36,8 +36,8 @@ public:
 	void RenderScene(sf::RenderWindow * window);
 
 	// GameplayScene
-	void Play();
 	void AlertNoteMissed();
+	bool SongPaused() const { return m_paused; }
 	
 
 private:
@@ -48,17 +48,22 @@ private:
 	void UpdateReceptorInput();
 	void UpdateSongAndNotes();
 	void UpdateComboText();
-	// Other
-	void PlayNotes();
+	// Other	
+	void Play();
 	void DropNote(int column);
 	LongNote* DropLongNote(int column);
 	void CheckForHit(int column);
 	void NoteHit(eHit hit);
 	void NoteMissed();
 	void UpdateText(eHit hit);
+	void TogglePause();
+	void UpdatePaused();
 	void LeaveScene(eLeaveSongReason reason);
 
 	static float GetXForColumn(int col);
+
+	// State logic
+	bool m_paused;
 
 	// Song components
 	Song* m_currentSong;
@@ -70,26 +75,29 @@ private:
 
 	// Song logic
 	bool m_songPlaying;
+	bool m_songStarted;
 	bool m_init;
 	bool m_endOfNotes;
-
+	//
 	int m_curMeasureIndex;
 	int m_curLineIndex;
 	Measure* m_curMeasure;
 	int m_currentBeat;
-
+	//
 	int m_curBeatLine;
 	int m_linesPerBeat;
 	float m_currentBpm;
-
+	//
 	float m_initialNoteDelay;
 	float m_initialSongDelay;
 	float m_nextLineDelay;
-
+	//
+	float m_elapsedSongTime;
+	float m_nextNoteDropTime;
+	//
 	StepMap* m_stepMap;
 	eLeaveSongReason m_leaveReason;
 	
-
 	// Gameplay vars
 	Score * m_score;
 

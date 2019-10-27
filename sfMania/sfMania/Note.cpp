@@ -35,6 +35,7 @@ Note::~Note()
 void Note::Update()
 {
 	if (!m_active) { return; }
+	if (gameplayScene->SongPaused()) { return; }
 
 	m_elapsedFallTime += GameManager::DeltaTime();
 	float normalized = m_elapsedFallTime / m_targetFallTime;

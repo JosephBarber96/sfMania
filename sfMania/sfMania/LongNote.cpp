@@ -5,6 +5,7 @@
 #include "GameManager.h"
 #include "Maths.h"
 #include "Receptor.h"
+#include "GameplayScene.h"
 
 LongNote::LongNote()
 	:
@@ -29,6 +30,7 @@ LongNote::~LongNote()
 void LongNote::Update()
 {
 	if (!m_active) { return; }
+	if (gameplayScene->SongPaused()) { return; }
 
 	// Fall time
 	m_elapsedFallTime += GameManager::DeltaTime();
