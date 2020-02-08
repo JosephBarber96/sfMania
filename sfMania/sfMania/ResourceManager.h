@@ -4,6 +4,7 @@
 #include <map>
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 enum eFont
 {
@@ -11,6 +12,8 @@ enum eFont
 	big,
 	bold
 };
+
+enum eSounds;
 
 class ResourceManager
 {
@@ -23,6 +26,7 @@ public:
 	static std::string AssetPath() { return "Assets\\"; }
 
 	static sf::Font* GetFont(eFont font);
+	static sf::SoundBuffer* GetSound(eSounds sound);
 	static sf::Texture* GetNoteTexture(int column);
 
 private:
@@ -30,6 +34,9 @@ private:
 
 	// Fonts
 	std::map<eFont, sf::Font*> m_fonts;
+
+	// Sounds
+	std::map<eSounds, sf::SoundBuffer*> m_sounds;
 
 	// Notes
 	sf::Texture* m_noteLeft;

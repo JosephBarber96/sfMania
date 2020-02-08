@@ -6,6 +6,7 @@
 #include "ResourceManager.h"
 #include "Utility.h"
 #include "Settings.h"
+#include "AudioManager.h"
 
 MainMenuScene::MainMenuScene() {}
 
@@ -85,6 +86,8 @@ void MainMenuScene::UpdateScene()
 			exit(EXIT_SUCCESS);
 			break;
 		}
+
+		AudioManager::PlaySound(eSounds::menuSelect);
 	}
 
 	if (Input::Up.m_keyPressed)
@@ -95,6 +98,11 @@ void MainMenuScene::UpdateScene()
 	{
 		MenuDown();
 	}
+}
+
+void MainMenuScene::UpdateSceneTransition(float normalized)
+{
+
 }
 
 void MainMenuScene::RenderScene(sf::RenderWindow * window)

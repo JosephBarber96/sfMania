@@ -1,4 +1,5 @@
 #include "ResourceManager.h"
+#include "AudioManager.h"
 
 ResourceManager* ResourceManager::instance;
 
@@ -13,11 +14,16 @@ void ResourceManager::Init()
 	// Font
 	instance->m_fonts = std::map<eFont, sf::Font*>();
 	instance->m_fonts.insert(std::pair<eFont, sf::Font*>(eFont::small, new sf::Font()));
-	instance->m_fonts[eFont::small]->loadFromFile(AssetPath() + "Fonts\\editundo.ttf");
+	instance->m_fonts[eFont::small]->loadFromFile(AssetPath() + "Fonts\\CaviarDreams.ttf");
 	instance->m_fonts.insert(std::pair<eFont, sf::Font*>(eFont::big, new sf::Font()));
-	instance->m_fonts[eFont::big]->loadFromFile(AssetPath() + "Fonts\\VCR_OSD_MONO_1.001.ttf");
+	instance->m_fonts[eFont::big]->loadFromFile(AssetPath() + "Fonts\\CaviarDreams.ttf");
 	instance->m_fonts.insert(std::pair<eFont, sf::Font*>(eFont::bold, new sf::Font()));
-	instance->m_fonts[eFont::bold]->loadFromFile(AssetPath() + "Fonts\\UpheavalPro.ttf");
+	instance->m_fonts[eFont::bold]->loadFromFile(AssetPath() + "Fonts\\CaviarDreams.ttf");
+
+	// Sounds
+	instance->m_sounds = std::map<eSounds, sf::SoundBuffer*>();
+	instance->m_sounds.insert(std::pair<eSounds, sf::SoundBuffer*>(eSounds::menuSelect, new sf::SoundBuffer()));
+	instance->m_sounds[eSounds::menuSelect]->loadFromFile(AssetPath() + "Sounds\\menu_select.wav");
 
 	// Notes
 	instance->m_noteLeft = new sf::Texture();
@@ -36,6 +42,10 @@ sf::Font* ResourceManager::GetFont(eFont font)
 	return instance->m_fonts[font];
 }
 
+sf::SoundBuffer* ResourceManager::GetSound(eSounds sound)
+{
+	return instance->m_sounds[sound];
+}
 
 sf::Texture* ResourceManager::GetNoteTexture(int column)
 {

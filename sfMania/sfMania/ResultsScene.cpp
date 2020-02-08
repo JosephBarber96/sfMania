@@ -145,6 +145,11 @@ void ResultsScene::UpdateScene()
 	}
 }
 
+void ResultsScene::UpdateSceneTransition(float normalized)
+{
+
+}
+
 void ResultsScene::RenderScene(sf::RenderWindow * window)
 {
 	window->draw(*m_backgroundSprite);

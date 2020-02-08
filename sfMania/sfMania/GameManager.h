@@ -1,4 +1,5 @@
 #pragma once
+#include <time.h>
 
 #include <SFML/Graphics.hpp>
 
@@ -13,7 +14,7 @@ public:
 	~GameManager();
 
 	// Consts
-	const float TRANS_TIME = 0.5f;
+	const float TRANS_TIME = 0.15f;
 
 	// Game init and main loop
 	void Init();

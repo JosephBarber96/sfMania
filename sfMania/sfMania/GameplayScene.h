@@ -33,6 +33,7 @@ public:
 	void InitScene();
 	void UnloadScene();
 	void UpdateScene();
+	void UpdateSceneTransition(float normalized);
 	void RenderScene(sf::RenderWindow * window);
 
 	// GameplayScene

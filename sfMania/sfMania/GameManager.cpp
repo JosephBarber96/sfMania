@@ -8,6 +8,7 @@
 #include "Settings.h"
 
 #include "ResourceManager.h"
+#include "AudioManager.h"
 
 // Scenes
 #include "MainMenuScene.h"
@@ -41,6 +42,7 @@ void GameManager::Init()
 	// Init external components and managers
 	GameObject::Init();
 	ResourceManager::Init();
+	AudioManager::Init();
 	Input::Init();
 
 	// Render "Now Loading" text
@@ -210,6 +212,11 @@ void GameManager::UpdateSceneTransition()
 	{
 		m_changingScene = false;
 	}
+
+	float normalizedPerHalfTransition = normalized;
+	if (normalizedPerHalfTransition > 1.0f)
+		normalizedPerHalfTransition -= 1.0f;
+	m_currentScene->UpdateSceneTransition(normalizedPerHalfTransition);
 }
 
 void GameManager::OnSceneChanged()

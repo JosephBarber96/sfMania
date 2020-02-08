@@ -209,6 +209,11 @@ void GameplayScene::UpdateScene()
 	}
 }
 
+void GameplayScene::UpdateSceneTransition(float normalized)
+{
+
+}
+
 void GameplayScene::RenderScene(sf::RenderWindow * window)
 {
 	// Background
@@ -402,7 +407,7 @@ void GameplayScene::UpdateSongAndNotes()
 	float delta = GameManager::DeltaTime();
 
 	// Play music
-	if (m_initialSongDelay <= 0 && !m_songStarted)
+	if (!m_songStarted && m_initialSongDelay <= 0)
 	{
 		m_songStarted = true;
 		m_songMusic->play();
@@ -509,12 +514,15 @@ void GameplayScene::UpdateSongAndNotes()
 				// wait pet beat
 				float wait_time_per_beat = current_wait_time / hits_per_bpm;
 
-				m_nextNoteDropTime = m_elapsedSongTime + wait_time_per_beat;
+				m_nextNoteDropTime = (m_nextNoteDropTime + wait_time_per_beat);
 			}
 		}
+
 		m_elapsedSongTime += delta;
 	}
+
 	
+
 	m_initialNoteDelay -= delta;
 	m_initialSongDelay -= delta;
 }

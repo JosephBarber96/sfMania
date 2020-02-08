@@ -68,6 +68,11 @@ void SettingsScene::UpdateScene()
 	}
 }
 
+void SettingsScene::UpdateSceneTransition(float normalized)
+{
+
+}
+
 void SettingsScene::RenderScene(sf::RenderWindow* window)
 {
 	window->draw(m_heading);

@@ -174,6 +174,11 @@ void SongSelectScene::UpdateScene()
 	}
 }
 
+void SongSelectScene::UpdateSceneTransition(float normalized)
+{
+
+}
+
 void SongSelectScene::RenderScene(sf::RenderWindow* window)
 {
 	window->draw(*m_backgroundSprite);

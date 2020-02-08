@@ -22,5 +22,6 @@ public:
 	virtual void UnloadScene() = 0;
 
 	virtual void UpdateScene() = 0;
+	virtual void UpdateSceneTransition(float normalized) = 0;
 	virtual void RenderScene(sf::RenderWindow * window) = 0;
 };
