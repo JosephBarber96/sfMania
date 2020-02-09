@@ -2,6 +2,8 @@
 
 #include <SFML/Audio.hpp>
 
+class Song;
+
 enum eSounds
 {
 	menuSelect,
@@ -12,15 +14,18 @@ enum eSounds
 class AudioManager
 {
 public:
+	static void Init();
+	static void PlaySound(eSounds sound);
+	static void PlayMusic(Song* song);
+	static void StopMusic();
+
+private:
 	AudioManager();
 	~AudioManager();
 
-	static void Init();
-	static void PlaySound(eSounds sound);
-
-private:
 	static AudioManager* instance;
 
-	sf::Sound sound;
+	sf::Sound m_sound;
+	sf::Music* m_music;
 };
 

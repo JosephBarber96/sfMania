@@ -32,6 +32,7 @@ public:
 	const float SCROLL_TIME = 0.15f;
 	const int PANEL_HEIGHT = 50;
 	const int PANEL_PADDING = 10;
+	const float TIME_BEFORE_SONG = 0.5f;
 
 private:
 	// Displays
@@ -44,6 +45,7 @@ private:
 	sf::Sprite* m_bannerSprite;
 
 	// Song
+	Song* m_currentSong;
 	int m_currentSongIndex;
 	int m_targetScrollIndex;	// Index we will be at after scrolling
 	int m_currentDifficultyIndex;
@@ -51,6 +53,8 @@ private:
 	// Scrolling
 	bool m_scrolling;
 	float m_elapsedScrollTime;
+	float m_timeOnSelectedSong;
+	bool m_songPlaying;
 
 	void Scroll(eScrollDir dir);
 	void OnScrollFinished();

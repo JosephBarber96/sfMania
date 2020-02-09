@@ -13,6 +13,7 @@
 #include "Song.h"
 #include "Settings.h"
 #include "BeatmapDifficultyPanel.h"
+#include "AudioManager.h"
 
 SongSelectScene::SongSelectScene()
 {
@@ -103,6 +104,8 @@ void SongSelectScene::UnloadScene()
 	{
 		delete m_difficultyPanels[i];
 	}
+
+	AudioManager::StopMusic();
 }
 
 void SongSelectScene::UpdateScene()
@@ -111,27 +114,23 @@ void SongSelectScene::UpdateScene()
 
 	// Go back
 	if (Input::Esc.m_keyPressed)
+	{
 		GameManager::ChangeScene(eScenes::mainMenu);
+	}
 
 	// Scroll
 	if (!m_scrolling)
 	{
 		// Advance song
-		if (Input::Right.m_keyPressed)
+		if (Input::Right.m_keyPressed && m_currentSongIndex < Song::SongCount() - 1)
 		{
-			if (m_currentSongIndex < Song::SongCount() - 1)
-			{
-				Scroll(eScrollDir::up);
-			}
+			Scroll(eScrollDir::up);
 		}
 
 		// Go back song
-		if (Input::Left.m_keyPressed)
+		if (Input::Left.m_keyPressed && m_currentSongIndex > 0)
 		{
-			if (m_currentSongIndex > 0)
-			{
-				Scroll(eScrollDir::down);
-			}
+			Scroll(eScrollDir::down);
 		}
 	}
 
@@ -158,7 +157,7 @@ void SongSelectScene::UpdateScene()
 	// Select
 	if (Input::Enter.m_keyPressed)
 	{
-		GameManager::SetChosenSong(Song::GetSong(m_currentSongIndex), m_currentDifficultyIndex);
+		GameManager::SetChosenSong(m_currentSong, m_currentDifficultyIndex);
 		GameManager::ChangeScene(eScenes::playingSong);
 	}
 
@@ -170,6 +169,16 @@ void SongSelectScene::UpdateScene()
 		if (m_elapsedScrollTime >= SCROLL_TIME)
 		{
 			OnScrollFinished();
+		}
+	}
+
+	if (!m_scrolling && !m_songPlaying)
+	{
+		m_timeOnSelectedSong += GameManager::DeltaTime();
+		if (m_timeOnSelectedSong >= TIME_BEFORE_SONG)
+		{
+			m_songPlaying = true;
+			AudioManager::PlayMusic(m_currentSong);
 		}
 	}
 }
@@ -224,25 +233,28 @@ void SongSelectScene::OnScrollFinished()
 	m_scrolling = false;
 	m_currentSongIndex = m_targetScrollIndex;
 	LoadInfoForSong();
+	AudioManager::StopMusic();
+	m_timeOnSelectedSong = 0;
+	m_songPlaying = false;
 }
 
 void SongSelectScene::LoadInfoForSong()
 {
-	Song* currentSong = Song::GetSong(m_currentSongIndex);
+	m_currentSong = Song::GetSong(m_currentSongIndex);
 
 	float width, height;
 	float widthScale, heightScale;
 	float targetWidth, targetHeight;
 
 	// Background
-	m_backgroundTexture->loadFromFile(currentSong->m_backgroundFile);
+	m_backgroundTexture->loadFromFile(m_currentSong->m_backgroundFile);
 	m_backgroundSprite->setTexture(*m_backgroundTexture);
 	m_backgroundSprite->setColor(sf::Color(255, 255, 255, 100));
 	auto backgroundScale = Utility::GetScaleForTargetSize(m_backgroundTexture, Settings::WindowX(), Settings::WindowY());
 	m_backgroundSprite->setScale(backgroundScale);
 
 	// Banner
-	m_bannerTexture->loadFromFile(currentSong->m_bannerFile);
+	m_bannerTexture->loadFromFile(m_currentSong->m_bannerFile);
 	m_bannerSprite->setTexture(*m_bannerTexture);
 	auto bannerScale = Utility::GetScaleForTargetSize(m_bannerTexture, BANNER_WIDTH, (int)(Settings::WindowY() / 5));
 	m_bannerSprite->setScale(bannerScale);
@@ -253,19 +265,19 @@ void SongSelectScene::LoadInfoForSong()
 	sb_x = m_bannerSprite->getPosition().x;
 	sb_y = m_bannerSprite->getPosition().y + m_bannerSprite->getGlobalBounds().height + 5;
 	m_songInfoBox->SetPosition(sb_x, sb_y);
-	m_songInfoBox->UpdateInformation(currentSong);
+	m_songInfoBox->UpdateInformation(m_currentSong);
 
 	// Delete current difficulty panels and create new ones
-	for (BeatmapDifficultyPanel* panel : m_difficultyPanels)
+	for (int i = m_difficultyPanels.size() - 1; i > 0; i--)
 	{
-		delete panel;
+		delete m_difficultyPanels[i];
 	}
 	m_difficultyPanels.clear();
 
-	int padding = 5;
+	int padding = 10;
 	int diffPanelHeight = 45;
 	int panel_y = sb_y + SONG_INFOBOX_HEIGHT + padding;
-	for (int i = 0; i < currentSong->StepmapCount(); i++)
+	for (int i = 0; i < m_currentSong->StepmapCount(); i++)
 	{
 		BeatmapDifficultyPanel* panel = new BeatmapDifficultyPanel();
 		panel->SetSize(BANNER_WIDTH, diffPanelHeight);
@@ -273,7 +285,7 @@ void SongSelectScene::LoadInfoForSong()
 		panel->SetOutlineColour(sf::Color::Black);
 		panel->SetOutlineThickness(3);
 		panel->SetFillColour(Utility::UnhighlightedColour());
-		panel->SetInfo(currentSong->GetStepmap(i));
+		panel->SetInfo(m_currentSong->GetStepmap(i));
 		m_difficultyPanels.push_back(panel);
 	}
 	m_difficultyPanels[0]->Highlight();

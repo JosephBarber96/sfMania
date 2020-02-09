@@ -21,8 +21,7 @@ public:
 	void Run();
 
 	// Static behaviour
-	static void SetChosenSong(Song* song, int difficulty) 
-	{ instance->m_currentlyChosenSong = song; instance->m_currentlyChosenDifficulty = difficulty; }
+	static void SetChosenSong(Song* song, int difficulty) { instance->m_currentlyChosenSong = song; instance->m_currentlyChosenDifficulty = difficulty; }
 	static void ChangeScene(eScenes p_newState);
 
 	// Getters
