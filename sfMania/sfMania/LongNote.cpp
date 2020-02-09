@@ -12,7 +12,9 @@ LongNote::LongNote()
 	Note()
 {
 	m_longBar = new sf::RectangleShape();
-	m_longBar->setFillColor(sf::Color(255, 255, 255, 128));
+	m_longBar->setOutlineColor(sf::Color(255, 255, 255, 255));
+	m_longBar->setOutlineThickness(2);
+	m_longBar->setFillColor(sf::Color(20, 20, 20));
 }
 
 

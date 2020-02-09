@@ -40,6 +40,10 @@ void SettingsScene::InitScene()
 	// Go back text
 	Utility::SetupText(&m_goBackText, ResourceManager::GetFont(eFont::big), "Go back.", htsz, sf::Color::White, sf::Color::Black, 3);
 
+	// Highlight
+	m_highlight = sf::RectangleShape();
+	m_highlight.setFillColor(Utility::HighlightedColour());
+
 	// Position everything
 	// (Done in a separate func so we can re-use behaviour for when resolution changes)
 	PositionScene();
@@ -81,6 +85,8 @@ void SettingsScene::RenderScene(sf::RenderWindow* window)
 	window->draw(m_currentResolutionText);
 
 	window->draw(m_goBackText);
+
+	window->draw(m_highlight);
 }
 
 
@@ -111,6 +117,12 @@ void SettingsScene::PositionScene()
 	x = Utility::GetXForText(&m_goBackText, 0.5f);
 	y = GetYForSetting(eOptions::goBack, false);
 	m_goBackText.setPosition(x, y);
+
+	// Highlight text
+	m_highlight.setSize(sf::Vector2f(Settings::WindowX() * 0.4f, Settings::WindowY() * 0.05f));
+	m_highlight.setPosition(
+		(Settings::WindowX() * 0.5f) - (m_highlight.getGlobalBounds().width * 0.5f),
+		GetYForSetting((eOptions)m_selectedOption, false));
 }
 
 void SettingsScene::HandleNavigation()
@@ -175,6 +187,10 @@ void SettingsScene::OnSelectedOptionChanged()
 	case eOptions::goBack:
 		break;
 	}
+
+	m_highlight.setPosition(
+		(Settings::WindowX() * 0.5f) - (m_highlight.getGlobalBounds().width * 0.5f),
+		GetYForSetting((eOptions)m_selectedOption, false));
 }
 
 void SettingsScene::OnSelectedResolutionChanged()

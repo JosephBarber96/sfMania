@@ -24,8 +24,7 @@ private:
 	sf::Text m_currentResolutionText;
 	sf::Text m_goBackText;
 
-	sf::Texture m_arrowTexture;
-	sf::Texture m_arrowSprite;
+	sf::RectangleShape m_highlight;
 
 	// OPTIONS
 

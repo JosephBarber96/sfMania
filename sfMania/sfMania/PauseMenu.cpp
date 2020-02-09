@@ -7,7 +7,7 @@
 
 PauseMenu::PauseMenu()
 {
-	m_currentOption = ePauseOptions::Restart;
+	m_currentOption = ePauseOptions::Resume;
 }
 
 PauseMenu::~PauseMenu() { }

@@ -203,6 +203,13 @@ void GameplayScene::UpdateScene()
 				UpdateSongAndNotes();
 			UpdateComboText();
 		}
+
+		// Has the song ended?
+		if (m_endOfNotes && m_songMusic->getStatus() == sf::SoundSource::Status::Stopped)
+		{
+			m_leaveReason = eLeaveSongReason::songEnd;
+			ResultsScene::LoadSceneResults(m_score);
+		}
 	}
 	else
 	{
@@ -720,6 +727,7 @@ void GameplayScene::UpdatePaused()
 			break;
 
 		case ePauseOptions::Quit:
+			m_leaveReason = eLeaveSongReason::quit;
 			GameManager::ChangeScene(eScenes::songSelect);
 			break;
 		}
