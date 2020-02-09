@@ -110,7 +110,10 @@ void GameManager::UpdateObjects()
 	// Run GameObject update loops
 	for (GameObject* obj : GameObject::GameObjects)
 	{
-		obj->Update();
+		if (obj->IsActive())
+		{
+			obj->Update();
+		}
 	}
 }
 

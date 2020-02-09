@@ -19,7 +19,11 @@ public:
 	void SetPosition(float x, float y);
 	virtual void OnSetPosition();
 
+	void SetActive(bool active);
+	bool IsActive() const;
+
 protected:
 	float m_x;
 	float m_y;
+	bool m_active;
 };

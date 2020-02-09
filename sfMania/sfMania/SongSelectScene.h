@@ -30,8 +30,8 @@ public:
 
 	// Scrolling
 	const float SCROLL_TIME = 0.15f;
-	const int PANEL_HEIGHT = 75;
-	const int PANEL_PADDING = 15;
+	const int PANEL_HEIGHT = 50;
+	const int PANEL_PADDING = 10;
 
 private:
 	// Displays

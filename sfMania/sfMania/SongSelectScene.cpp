@@ -237,7 +237,7 @@ void SongSelectScene::LoadInfoForSong()
 	// Background
 	m_backgroundTexture->loadFromFile(currentSong->m_backgroundFile);
 	m_backgroundSprite->setTexture(*m_backgroundTexture);
-	m_backgroundSprite->setColor(Utility::UnhighlightedColour());	
+	m_backgroundSprite->setColor(sf::Color(255, 255, 255, 100));
 	auto backgroundScale = Utility::GetScaleForTargetSize(m_backgroundTexture, Settings::WindowX(), Settings::WindowY());
 	m_backgroundSprite->setScale(backgroundScale);
 

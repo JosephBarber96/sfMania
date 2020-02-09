@@ -11,6 +11,8 @@
 #include "Input.h"
 #include "Maths.h"
 
+#include "PauseMenu.h"
+
 #include "Song.h"
 #include "StepMap.h"
 #include "Measure.h"
@@ -149,6 +151,11 @@ void GameplayScene::InitScene()
 		m_targetComboExpandTime = 0.15f;
 	}
 
+	// Pause menu
+	m_pauseMenu = new PauseMenu();
+	m_pauseMenu->Init();
+	m_pauseMenu->IsActive();
+
 	// Vars
 	m_songPlaying = false;
 
@@ -179,6 +186,7 @@ void GameplayScene::UnloadScene()
 	delete m_comboText;
 	if (m_leaveReason == eLeaveSongReason::quit)
 		delete m_score;
+	delete m_pauseMenu;
 
 	// Reset vars
 	m_paused = false;
@@ -242,6 +250,12 @@ void GameplayScene::RenderScene(sf::RenderWindow * window)
 	// Combo text
 	window->draw(*m_comboText);
 	window->draw(*m_hitText);
+
+	// Paused
+	if (m_paused)
+	{
+		m_pauseMenu->RenderSelf(window);
+	}
 }
 
 
@@ -680,6 +694,7 @@ void GameplayScene::TogglePause()
 		std::cout << "Paused." << std::endl;
 		m_paused = true;
 		m_songMusic->pause();
+		m_pauseMenu->SetActive(true);
 	}
 	// Unpause
 	else
@@ -687,12 +702,28 @@ void GameplayScene::TogglePause()
 		std::cout << "Unpaused." << std::endl;
 		m_paused = false;
 		m_songMusic->play();
+		m_pauseMenu->SetActive(false);
 	}
 }
 
 void GameplayScene::UpdatePaused()
 {
+	if (Input::Enter.m_keyPressed)
+	{
+		switch (m_pauseMenu->CurrentOption())
+		{
+		case ePauseOptions::Resume:
+			TogglePause();
+			break;
 
+		case ePauseOptions::Restart:
+			break;
+
+		case ePauseOptions::Quit:
+			GameManager::ChangeScene(eScenes::songSelect);
+			break;
+		}
+	}
 }
 
 void GameplayScene::LeaveScene(eLeaveSongReason reason)

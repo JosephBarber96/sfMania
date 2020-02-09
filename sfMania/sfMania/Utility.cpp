@@ -62,11 +62,15 @@ namespace Utility
 		return ((Settings::WindowX() * normalizedX) - (text->getGlobalBounds().width * 0.5f));
 	}
 
-	sf::Vector2f GetScreenPosForTextForNormalizedScreenCoordinate(sf::Text* text, float targetX, float targetY)
+	sf::Vector2f GetScreenPosForTextForNormalizedScreenCoordinate(sf::Text* text, float normalizedX, float normalizedY)
 	{
-		float half_width = text->getGlobalBounds().width / 2.0f;
-		float half_height = text->getGlobalBounds().height / 2.0f;
-		return sf::Vector2f(targetX + half_width, targetY + half_height);
+		float half_width = text->getGlobalBounds().width * 0.5f;
+		float half_height = text->getGlobalBounds().height * 0.5f;
+
+		float x = Settings::WindowX() * normalizedX;
+		float y = Settings::WindowY() * normalizedY;
+
+		return sf::Vector2f(x - half_width, y - half_height);
 	}
 
 	void SetupText(sf::Text* text, eFont font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x, int y)
@@ -85,8 +89,8 @@ namespace Utility
 		text->setPosition(x, y);
 	}
 
-	sf::Color UnhighlightedColour() { return sf::Color(255, 255, 255, 65); }
-	sf::Color HighlightedColour() { return sf::Color(255, 255, 255, 100); }
+	sf::Color UnhighlightedColour() { return sf::Color(0, 0, 0, 225); }
+	sf::Color HighlightedColour() { return sf::Color(255, 255, 255, 128); }
 
 
 

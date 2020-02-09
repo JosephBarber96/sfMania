@@ -14,11 +14,11 @@ void ResourceManager::Init()
 	// Font
 	instance->m_fonts = std::map<eFont, sf::Font*>();
 	instance->m_fonts.insert(std::pair<eFont, sf::Font*>(eFont::small, new sf::Font()));
-	instance->m_fonts[eFont::small]->loadFromFile(AssetPath() + "Fonts\\CaviarDreams.ttf");
+	instance->m_fonts[eFont::small]->loadFromFile(AssetPath() + "Fonts\\theboldfont.ttf");
 	instance->m_fonts.insert(std::pair<eFont, sf::Font*>(eFont::big, new sf::Font()));
-	instance->m_fonts[eFont::big]->loadFromFile(AssetPath() + "Fonts\\CaviarDreams.ttf");
+	instance->m_fonts[eFont::big]->loadFromFile(AssetPath() + "Fonts\\theboldfont.ttf");
 	instance->m_fonts.insert(std::pair<eFont, sf::Font*>(eFont::bold, new sf::Font()));
-	instance->m_fonts[eFont::bold]->loadFromFile(AssetPath() + "Fonts\\CaviarDreams.ttf");
+	instance->m_fonts[eFont::bold]->loadFromFile(AssetPath() + "Fonts\\theboldfont.ttf");
 
 	// Sounds
 	instance->m_sounds = std::map<eSounds, sf::SoundBuffer*>();

@@ -15,6 +15,7 @@ class Note;
 class LongNote;
 class StepMap;
 class Measure;
+class PauseMenu;
 enum eHit;
 
 enum eLeaveSongReason
@@ -119,6 +120,8 @@ private:
 	sf::Texture * m_backgroundTexture;
 	sf::Sprite * m_backgroundSprite;
 	sf::RectangleShape * m_playBox;
+
+	PauseMenu* m_pauseMenu;
 
 	// Combo score
 	sf::Text * m_comboText;

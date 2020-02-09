@@ -139,6 +139,7 @@
     <ClCompile Include="Measure.cpp" />
     <ClCompile Include="MediaBox.cpp" />
     <ClCompile Include="Note.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Receptor.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ResultsScene.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="Measure.h" />
     <ClInclude Include="MediaBox.h" />
     <ClInclude Include="Note.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Receptor.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ResultsScene.h" />

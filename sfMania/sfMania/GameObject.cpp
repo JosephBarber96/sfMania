@@ -4,6 +4,7 @@ std::vector<GameObject*> GameObject::GameObjects;
 
 GameObject::GameObject()
 {
+	m_active = true;
 	GameObject::GameObjects.push_back(this);
 }
 
@@ -40,4 +41,14 @@ void GameObject::SetPosition(float x, float y)
 void GameObject::OnSetPosition()
 {
 
+}
+
+void GameObject::SetActive(bool active)
+{
+	m_active = active;
+}
+
+bool GameObject::IsActive() const
+{
+	return m_active;
 }
