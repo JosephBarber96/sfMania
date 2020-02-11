@@ -23,9 +23,9 @@ void PauseMenu::Init()
 	Utility::SetupText(&m_restartText, eFont::big, "Restart", fontSize, sf::Color::White, sf::Color::Black, 2);
 	Utility::SetupText(&m_quitText, eFont::big, "Quit", fontSize, sf::Color::White, sf::Color::Black, 2);
 
-	m_resumeText.setPosition(Utility::GetScreenPosForTextForNormalizedScreenCoordinate(&m_resumeText, 0.5f, 0.4f));
-	m_restartText.setPosition(Utility::GetScreenPosForTextForNormalizedScreenCoordinate(&m_restartText, 0.5f, 0.5f));
-	m_quitText.setPosition(Utility::GetScreenPosForTextForNormalizedScreenCoordinate(&m_quitText, 0.5f, 0.6f));
+	m_resumeText.setPosition(Utility::NormalizedToScreen(&m_resumeText, 0.5f, 0.4f));
+	m_restartText.setPosition(Utility::NormalizedToScreen(&m_restartText, 0.5f, 0.5f));
+	m_quitText.setPosition(Utility::NormalizedToScreen(&m_quitText, 0.5f, 0.6f));
 
 	m_highlight = sf::RectangleShape();
 	m_highlight.setFillColor(Utility::HighlightedColour());

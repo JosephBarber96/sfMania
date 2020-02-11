@@ -22,6 +22,7 @@ private:
 
 	sf::Text m_resolutionHeadingText;
 	sf::Text m_currentResolutionText;
+	sf::Text m_fullscreenText;
 	sf::Text m_goBackText;
 
 	sf::RectangleShape m_highlight;
@@ -32,8 +33,9 @@ private:
 	{
 		options_first	= 0,
 		resolution		= 1,
-		goBack			= 2,
-		options_last	= 3,
+		fullScreen		= 2,
+		goBack			= 3,
+		options_last	= 4,
 	};
 
 	int m_selectedOption;
@@ -57,5 +59,5 @@ private:
 	void ApplySelectedResolution();
 
 	// Data
-	float GetYForSetting(eOptions option, bool header);
+	float GetYForSetting(eOptions option, bool header = false);
 };

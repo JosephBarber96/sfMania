@@ -62,7 +62,7 @@ namespace Utility
 		return ((Settings::WindowX() * normalizedX) - (text->getGlobalBounds().width * 0.5f));
 	}
 
-	sf::Vector2f GetScreenPosForTextForNormalizedScreenCoordinate(sf::Text* text, float normalizedX, float normalizedY)
+	sf::Vector2f NormalizedToScreen(sf::Text* text, float normalizedX, float normalizedY)
 	{
 		float half_width = text->getGlobalBounds().width * 0.5f;
 		float half_height = text->getGlobalBounds().height * 0.5f;

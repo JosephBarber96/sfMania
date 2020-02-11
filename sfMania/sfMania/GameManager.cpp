@@ -289,7 +289,7 @@ void GameManager::OnSceneChanged()
 
 void GameManager::ChangeWindowResolution(int x, int y)
 {
-	m_window->create(sf::VideoMode(Settings::WindowX(), Settings::WindowY()), "sf_mania", sf::Style::Default);
+	m_window->create(sf::VideoMode(x, y), "sf_mania", Settings::FullScreen() ? sf::Style::Fullscreen : sf::Style::Default);
 }
 
 void GameManager::SetFullscreen(bool fullscreen)

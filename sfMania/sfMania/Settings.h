@@ -19,6 +19,7 @@ public:
 
 	// Settings
 	static eResolution Resolution() { return _resolution; }
+	static bool FullScreen() { return _fullscreen; }
 	static int WindowX() { return _windowX; }
 	static int WindowY() { return _windowY; }
 	static float FallTime() { return 0.55f; }
@@ -34,6 +35,7 @@ private:
 	friend class GameManager;
 
 	static eResolution _resolution;
+	static float _fullScreen;
 	static float _windowX;
 	static float _windowY;
 	static float _fullscreen;

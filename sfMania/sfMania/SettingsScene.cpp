@@ -30,14 +30,11 @@ void SettingsScene::InitScene()
 	int htsz = 30; // Header text size
 	int stsz = 25; // Small text size
 
-	// Setup Header text
+	// Setup text
 	Utility::SetupText(&m_heading, ResourceManager::GetFont(eFont::big), "Settings.", ttsz, sf::Color::White, sf::Color::Black, 3);	
-	
-	// Resolution text
 	Utility::SetupText(&m_resolutionHeadingText, ResourceManager::GetFont(eFont::big), "Resolution:", htsz, sf::Color::White, sf::Color::Black, 3);
 	Utility::SetupText(&m_currentResolutionText, ResourceManager::GetFont(eFont::small), Utility::GetStringForResolution(Settings::Resolution()), stsz, sf::Color::White, sf::Color::Black, 3);
-
-	// Go back text
+	Utility::SetupText(&m_fullscreenText, ResourceManager::GetFont(eFont::big), "Toggle Fullscreen", htsz, sf::Color::White, sf::Color::Black, 3);
 	Utility::SetupText(&m_goBackText, ResourceManager::GetFont(eFont::big), "Go back.", htsz, sf::Color::White, sf::Color::Black, 3);
 
 	// Highlight
@@ -80,10 +77,9 @@ void SettingsScene::UpdateSceneTransition(float normalized)
 void SettingsScene::RenderScene(sf::RenderWindow* window)
 {
 	window->draw(m_heading);
-
 	window->draw(m_resolutionHeadingText);
 	window->draw(m_currentResolutionText);
-
+	window->draw(m_fullscreenText);
 	window->draw(m_goBackText);
 
 	window->draw(m_highlight);
@@ -97,32 +93,16 @@ void SettingsScene::RenderScene(sf::RenderWindow* window)
 
 void SettingsScene::PositionScene()
 {
-	int x, y;
+	// Setup text
+	m_heading.setPosition(Utility::NormalizedToScreen(&m_heading, 0.5f, 0.05f));
+	m_resolutionHeadingText.setPosition(Utility::NormalizedToScreen(&m_resolutionHeadingText, 0.5f, GetYForSetting(eOptions::resolution, true)));
+	m_currentResolutionText.setPosition(Utility::NormalizedToScreen(&m_currentResolutionText, 0.5f, GetYForSetting(eOptions::resolution, false)));
+	m_fullscreenText.setPosition(Utility::NormalizedToScreen(&m_fullscreenText, 0.5f, GetYForSetting(eOptions::fullScreen)));
+	m_goBackText.setPosition(Utility::NormalizedToScreen(&m_goBackText, 0.5f, GetYForSetting(eOptions::goBack)));
 
-	// Setup Header text
-	x = Utility::GetXForText(&m_heading, 0.5f);
-	y = 10;
-	m_heading.setPosition(x, y);
-
-	// Resolution text
-	x = Utility::GetXForText(&m_resolutionHeadingText, 0.5f);
-	y = GetYForSetting(eOptions::resolution, true);
-	m_resolutionHeadingText.setPosition(x, y);
-
-	x = Utility::GetXForText(&m_currentResolutionText, 0.5f);
-	y = GetYForSetting(eOptions::resolution, false);
-	m_currentResolutionText.setPosition(x, y);
-
-	// Go back text
-	x = Utility::GetXForText(&m_goBackText, 0.5f);
-	y = GetYForSetting(eOptions::goBack, false);
-	m_goBackText.setPosition(x, y);
-
-	// Highlight text
+	// Highlight
 	m_highlight.setSize(sf::Vector2f(Settings::WindowX() * 0.4f, Settings::WindowY() * 0.05f));
-	m_highlight.setPosition(
-		(Settings::WindowX() * 0.5f) - (m_highlight.getGlobalBounds().width * 0.5f),
-		GetYForSetting((eOptions)m_selectedOption, false));
+	OnSelectedOptionChanged();
 }
 
 void SettingsScene::HandleNavigation()
@@ -171,6 +151,10 @@ void SettingsScene::OnEnterPressed()
 		ApplySelectedResolution();
 		break;
 
+	case eOptions::fullScreen:
+		Settings::SetFullscreen(!Settings::FullScreen());
+		break;
+
 	case eOptions::goBack:
 		GameManager::ChangeScene(eScenes::mainMenu);
 		break;
@@ -179,18 +163,9 @@ void SettingsScene::OnEnterPressed()
 
 void SettingsScene::OnSelectedOptionChanged()
 {
-	switch (m_selectedOption)
-	{
-	case eOptions::resolution:
-		break;
-
-	case eOptions::goBack:
-		break;
-	}
-
 	m_highlight.setPosition(
 		(Settings::WindowX() * 0.5f) - (m_highlight.getGlobalBounds().width * 0.5f),
-		GetYForSetting((eOptions)m_selectedOption, false));
+		(Settings::WindowY() * GetYForSetting((eOptions)m_selectedOption)) - (m_highlight.getGlobalBounds().height * 0.5f));
 }
 
 void SettingsScene::OnSelectedResolutionChanged()
@@ -215,11 +190,14 @@ float SettingsScene::GetYForSetting(eOptions option, bool header)
 	{
 	case eOptions::resolution:
 		if (header)
-			return Settings::WindowY() * 0.2f;
+			return 0.2f;
 		else
-			return Settings::WindowY() * 0.25f;
+			return 0.25f;
+
+	case eOptions::fullScreen:
+		return 0.4f;
 
 	case eOptions::goBack:
-		return Settings::WindowY() * 0.9f;
+		return 0.9f;
 	}
 }
