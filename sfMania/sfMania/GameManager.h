@@ -21,8 +21,9 @@ public:
 	void Run();
 
 	// Static behaviour
-	static void SetChosenSong(Song* song, int difficulty) { instance->m_currentlyChosenSong = song; instance->m_currentlyChosenDifficulty = difficulty; }
-	static void ChangeScene(eScenes p_newState);
+	static void SetChosenSong(Song* song, int difficulty);
+	static void ChangeScene(eScenes p_newScene);
+	static void ReloadScene();
 
 	// Getters
 	static float DeltaTime() { return m_deltaTime; }
@@ -44,7 +45,7 @@ private:
 	// Internal update/render logic
 	void SelfUpdate();
 	void SelfRender();
-	void SceneChange(eScenes p_newScene);
+	void SceneChange(eScenes p_newScene, bool reload = false);
 
 	// Update scene changing
 	void UpdateSceneTransition();

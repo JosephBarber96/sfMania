@@ -34,6 +34,9 @@ private:
 	sf::Texture* m_bgTexture;
 	sf::Sprite* m_bgSprite;
 
+	// Title
+	sf::Text m_Title;
+
 	// Text options
 	sf::Text m_Start;
 	sf::Text m_Options;

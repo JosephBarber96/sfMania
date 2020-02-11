@@ -21,6 +21,11 @@ void MainMenuScene::InitScene()
 	m_bgSprite->setTexture(*m_bgTexture);
 	m_bgSprite->setScale(Utility::GetScaleForTargetSize(m_bgTexture, Settings::WindowX(), Settings::WindowY()));
 
+	int titleFontSize = 72;
+	m_Title = sf::Text();
+	Utility::SetupText(&m_Title, ResourceManager::GetFont(eFont::bold), "SFMania", titleFontSize, sf::Color::White, sf::Color::Black, 2);
+	m_Title.setPosition(Utility::GetScreenPosForTextForNormalizedScreenCoordinate(&m_Title, 0.5f, 0.25f));
+
 	// Text
 	int fontSize = 35;
 
@@ -108,6 +113,8 @@ void MainMenuScene::UpdateSceneTransition(float normalized)
 void MainMenuScene::RenderScene(sf::RenderWindow * window)
 {
 	window->draw(*m_bgSprite);
+
+	window->draw(m_Title);
 
 	window->draw(m_Start);
 	window->draw(m_Options);

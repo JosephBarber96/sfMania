@@ -724,6 +724,8 @@ void GameplayScene::UpdatePaused()
 			break;
 
 		case ePauseOptions::Restart:
+			// Re-load into the current scene. 
+			GameManager::ReloadScene();
 			break;
 
 		case ePauseOptions::Quit:

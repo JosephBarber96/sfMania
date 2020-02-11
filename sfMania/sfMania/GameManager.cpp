@@ -180,6 +180,19 @@ void GameManager::SelfRender()
 
 
 //---------------------------------------------
+// Setting currently selected song
+//---------------------------------------------
+
+void GameManager::SetChosenSong(Song* song, int difficulty)
+{
+	instance->m_currentlyChosenSong = song;
+	instance->m_currentlyChosenDifficulty = difficulty;
+}
+
+
+
+
+//---------------------------------------------
 // Change scene
 //---------------------------------------------
 
@@ -188,10 +201,15 @@ void GameManager::ChangeScene(eScenes p_newScene)
 	instance->SceneChange(p_newScene);
 }
 
-void GameManager::SceneChange(eScenes p_newScene)
+void GameManager::ReloadScene()
+{
+	instance->SceneChange(instance->m_scene, true);
+}
+
+void GameManager::SceneChange(eScenes p_newScene, bool reload)
 {
 	if (m_changingScene) { return; }
-	if (m_scene == p_newScene) { return; }
+	if (m_scene == p_newScene && !reload) { return; }
 
 	m_changingScene = true;
 	m_sceneChanged = false;
