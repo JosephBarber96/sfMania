@@ -226,6 +226,8 @@ void SongSelectScene::Scroll(eScrollDir dir)
 	{
 		m_songPanels[i]->Scroll(dir, SCROLL_TIME, PANEL_HEIGHT + PANEL_PADDING);
 	}
+
+	AudioManager::PlaySound(eSounds::scroll);
 }
 
 void SongSelectScene::OnScrollFinished()

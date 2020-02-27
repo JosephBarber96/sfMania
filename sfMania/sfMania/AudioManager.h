@@ -6,9 +6,11 @@ class Song;
 
 enum eSounds
 {
-	menuSelect,
+	menuConfirm,
 	menuCancel,
-	sceneTransition
+	menuSelect,
+	sceneTransition,
+	scroll,
 };
 
 class AudioManager

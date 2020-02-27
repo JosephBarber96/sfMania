@@ -18,6 +18,9 @@ void AudioManager::Init()
 	instance = new AudioManager();
 	instance->m_sound = sf::Sound();
 	instance->m_music = new sf::Music();
+
+	instance->m_sound.setVolume(50);
+	instance->m_music->setVolume(50);
 }
 
 void AudioManager::PlaySound(eSounds sound)

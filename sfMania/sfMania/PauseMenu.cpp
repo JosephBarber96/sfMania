@@ -4,6 +4,7 @@
 #include "Utility.h"
 #include "ResourceManager.h"
 #include "Input.h"
+#include "AudioManager.h"
 
 PauseMenu::PauseMenu()
 {
@@ -97,4 +98,6 @@ void PauseMenu::OnOptionChanged()
 	pos.y -= height * 0.375f;
 
 	m_highlight.setPosition(pos);
+
+	AudioManager::PlaySound(eSounds::menuSelect);
 }

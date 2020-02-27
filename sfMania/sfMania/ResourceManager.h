@@ -30,6 +30,11 @@ public:
 	static sf::Texture* GetNoteTexture(int column);
 
 private:
+
+	static void LoadFonts();
+	static void LoadSounds();
+	static void LoadSprites();
+
 	static ResourceManager* instance;
 
 	// Fonts

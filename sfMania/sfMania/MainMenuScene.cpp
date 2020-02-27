@@ -92,7 +92,7 @@ void MainMenuScene::UpdateScene()
 			break;
 		}
 
-		AudioManager::PlaySound(eSounds::menuSelect);
+		AudioManager::PlaySound(eSounds::menuConfirm);
 	}
 
 	if (Input::Up.m_keyPressed)
@@ -154,6 +154,7 @@ void MainMenuScene::OnMenuChange()
 {
 	m_menuArrowRightSprite->setPosition(m_menuArrowRightSprite->getPosition().x, GetYForOption(m_currentOption));
 	m_menuArrowLeftSprite->setPosition(m_menuArrowLeftSprite->getPosition().x, GetYForOption(m_currentOption));
+	AudioManager::PlaySound(eSounds::menuSelect);
 }
 
 float MainMenuScene::GetYForOption(int index)
