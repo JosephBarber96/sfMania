@@ -1,5 +1,7 @@
 #include "GameObject.h"
 
+#include "Settings.h"
+
 std::vector<GameObject*> GameObject::GameObjects;
 
 GameObject::GameObject()
@@ -35,6 +37,13 @@ void GameObject::SetPosition(float x, float y)
 {
 	m_x = x;
 	m_y = y;
+	OnSetPosition();
+}
+
+void GameObject::SetPositionNormalized(float x, float y)
+{
+	m_x = Settings::WindowX() * x;
+	m_y = Settings::WindowY() * y;
 	OnSetPosition();
 }
 

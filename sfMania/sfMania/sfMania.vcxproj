@@ -130,6 +130,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameplayScene.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LongNote.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameplayScene.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="LongNote.h" />

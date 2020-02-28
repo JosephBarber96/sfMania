@@ -19,6 +19,7 @@
 #include "Line.h"
 #include "BPM.h"
 #include "Score.h"
+#include "HealthBar.h"
 
 #include "Receptor.h"
 #include "Note.h"
@@ -72,6 +73,8 @@ void GameplayScene::InitScene()
 {
 	// Init vars
 	m_score = new Score();
+	m_healthBar = new HealthBar(MAX_HEALTH);
+	m_healthBar->SetPositionNormalized(0.05f, 0.05f);
 	m_paused = false;
 
 	// Get song
@@ -184,9 +187,10 @@ void GameplayScene::UnloadScene()
 	delete m_backgroundSprite;
 	delete m_playBox;
 	delete m_comboText;
+	delete m_pauseMenu;
+	delete m_healthBar;
 	if (m_leaveReason == eLeaveSongReason::quit)
 		delete m_score;
-	delete m_pauseMenu;
 
 	// Reset vars
 	m_paused = false;
@@ -207,8 +211,13 @@ void GameplayScene::UpdateScene()
 		// Has the song ended?
 		if (m_endOfNotes && m_songMusic->getStatus() == sf::SoundSource::Status::Stopped)
 		{
-			m_leaveReason = eLeaveSongReason::songEnd;
-			ResultsScene::LoadSceneResults(m_score);
+			LeaveScene(eLeaveSongReason::songEnd);
+		}
+
+		// Has player died?
+		if (m_healthBar->IsDead())
+		{
+			LeaveScene(eLeaveSongReason::dead);
 		}
 	}
 	else
@@ -242,6 +251,9 @@ void GameplayScene::RenderScene(sf::RenderWindow * window)
 	m_receptorRightMid->RenderSelf(window);
 	m_receptorRight->RenderSelf(window);
 
+	// Healthbar
+	m_healthBar->RenderSelf(window);
+
 	// Notes
 	for (int i = 0; i < m_notes.size(); i++)
 	{
@@ -253,6 +265,7 @@ void GameplayScene::RenderScene(sf::RenderWindow * window)
 	{
 		m_longNotes[i]->RenderSelf(window);
 	}
+
 
 	// Combo text
 	window->draw(*m_comboText);
@@ -654,11 +667,13 @@ void GameplayScene::NoteHit(eHit hit)
 		m_score->AddGreat();
 
 	UpdateText(hit);
+	m_healthBar->IncreaseHealth(HEALTH_GAIN);
 }
 
 void GameplayScene::NoteMissed()
 {
 	m_score->AddMiss();
+	m_healthBar->ReduceHealth(HEALTH_LOSS);
 	UpdateText(eHit::miss);
 }
 
@@ -729,8 +744,7 @@ void GameplayScene::UpdatePaused()
 			break;
 
 		case ePauseOptions::Quit:
-			m_leaveReason = eLeaveSongReason::quit;
-			GameManager::ChangeScene(eScenes::songSelect);
+			LeaveScene(eLeaveSongReason::quit);
 			break;
 		}
 	}
@@ -751,9 +765,14 @@ void GameplayScene::LeaveScene(eLeaveSongReason reason)
 		// Song Select
 		GameManager::ChangeScene(eScenes::songSelect);
 	}
+	// Fail
+	if (reason == eLeaveSongReason::dead)
+	{
+		m_score->SetFailed();
+		ResultsScene::LoadSceneResults(m_score);
+	}
 	else if (reason == eLeaveSongReason::songEnd)
 	{
-		// Score screen
 		ResultsScene::LoadSceneResults(m_score);
 	}
 }

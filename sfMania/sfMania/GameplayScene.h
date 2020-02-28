@@ -16,12 +16,14 @@ class LongNote;
 class StepMap;
 class Measure;
 class PauseMenu;
+class HealthBar;
 enum eHit;
 
 enum eLeaveSongReason
 {
 	quit,
-	songEnd
+	songEnd,
+	dead,
 };
 
 class GameplayScene : public Scene
@@ -29,6 +31,10 @@ class GameplayScene : public Scene
 public:
 	GameplayScene();
 	~GameplayScene();
+
+	const int MAX_HEALTH = 100;
+	const int HEALTH_LOSS = 10;
+	const int HEALTH_GAIN = 1;
 
 	// Scene
 	void InitScene();
@@ -101,7 +107,9 @@ private:
 	eLeaveSongReason m_leaveReason;
 	
 	// Gameplay vars
-	Score * m_score;
+	Score* m_score;
+	HealthBar* m_healthBar;
+
 
 	// Receptors
 	Receptor * m_receptorLeft;

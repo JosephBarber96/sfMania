@@ -8,6 +8,7 @@ Score::Score()
 	m_missNotes = 0;
 	m_combo = 0;
 	m_maxCombo = 0;
+	m_failed = false;
 }
 
 
@@ -36,8 +37,16 @@ void Score::AddMiss()
 	m_combo = 0;
 }
 
+void Score::SetFailed()
+{
+	m_failed = true;
+}
+
 eGrade Score::CalculateScore() const
 {
+	if (m_failed)
+		return eGrade::F;
+
 	// SCORE CALCULATION:
 	//
 	// DP = Sum of score of every note.

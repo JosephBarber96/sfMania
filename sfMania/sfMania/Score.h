@@ -8,7 +8,8 @@ enum eGrade
 	B,
 	C,
 	D,
-	E
+	E,
+	F
 };
 
 enum eHit
@@ -27,6 +28,7 @@ public:
 	void AddPerfect();
 	void AddGreat();
 	void AddMiss();
+	void SetFailed();
 	eGrade CalculateScore() const;
 
 	// Getters
@@ -43,4 +45,6 @@ private:
 
 	int m_combo;
 	int m_maxCombo;
+
+	bool m_failed;
 };

@@ -17,6 +17,7 @@ public:
 	virtual void RenderSelf(sf::RenderWindow* window) = 0;
 
 	void SetPosition(float x, float y);
+	void SetPositionNormalized(float x, float y);
 	virtual void OnSetPosition();
 
 	void SetActive(bool active);
