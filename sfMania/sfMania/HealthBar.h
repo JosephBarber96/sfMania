@@ -12,6 +12,7 @@ public:
 	void OnSetPosition();
 
 	// HealthBar
+	void SetupPosition();
 	void IncreaseHealth(int health);
 	void ReduceHealth(int health);
 	bool IsDead() const;

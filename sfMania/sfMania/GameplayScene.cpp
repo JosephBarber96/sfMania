@@ -20,6 +20,7 @@
 #include "BPM.h"
 #include "Score.h"
 #include "HealthBar.h"
+#include "ProgressBar.h"
 
 #include "Receptor.h"
 #include "Note.h"
@@ -73,8 +74,6 @@ void GameplayScene::InitScene()
 {
 	// Init vars
 	m_score = new Score();
-	m_healthBar = new HealthBar(MAX_HEALTH);
-	m_healthBar->SetPositionNormalized(0.05f, 0.05f);
 	m_paused = false;
 
 	// Get song
@@ -154,6 +153,14 @@ void GameplayScene::InitScene()
 		m_targetComboExpandTime = 0.15f;
 	}
 
+	// Health bar
+	m_healthBar = new HealthBar(MAX_HEALTH);
+	m_healthBar->SetupPosition();
+
+	// Progress bar 
+	m_progressBar = new ProgressBar();
+	m_progressBar->SetupPosition();
+
 	// Pause menu
 	m_pauseMenu = new PauseMenu();
 	m_pauseMenu->Init();
@@ -189,6 +196,7 @@ void GameplayScene::UnloadScene()
 	delete m_comboText;
 	delete m_pauseMenu;
 	delete m_healthBar;
+	delete m_progressBar;
 	if (m_leaveReason == eLeaveSongReason::quit)
 		delete m_score;
 
@@ -208,16 +216,23 @@ void GameplayScene::UpdateScene()
 			UpdateComboText();
 		}
 
+
+		// Progress bar
+		float prog = m_songMusic->getPlayingOffset() / m_songMusic->getDuration();
+		m_progressBar->SetProgressNormalised(prog);
+
 		// Has the song ended?
 		if (m_endOfNotes && m_songMusic->getStatus() == sf::SoundSource::Status::Stopped)
 		{
 			LeaveScene(eLeaveSongReason::songEnd);
+			return;
 		}
 
 		// Has player died?
 		if (m_healthBar->IsDead())
 		{
 			LeaveScene(eLeaveSongReason::dead);
+			return;
 		}
 	}
 	else
@@ -251,9 +266,6 @@ void GameplayScene::RenderScene(sf::RenderWindow * window)
 	m_receptorRightMid->RenderSelf(window);
 	m_receptorRight->RenderSelf(window);
 
-	// Healthbar
-	m_healthBar->RenderSelf(window);
-
 	// Notes
 	for (int i = 0; i < m_notes.size(); i++)
 	{
@@ -266,6 +278,11 @@ void GameplayScene::RenderScene(sf::RenderWindow * window)
 		m_longNotes[i]->RenderSelf(window);
 	}
 
+	// Healthbar
+	m_healthBar->RenderSelf(window);
+
+	// Progress bar
+	m_progressBar->RenderSelf(window);
 
 	// Combo text
 	window->draw(*m_comboText);
@@ -310,37 +327,6 @@ void GameplayScene::Play()
 	// Calculate offset
 	float songOffset = m_currentSong->m_offset;
 	float noteOffset = Settings::FallTime();
-
-	//float finalOffset = songOffset - noteOffset;
-
-	//// Offset 0, song and note at same time
-	//if (finalOffset == 0)
-	//{
-	//	m_initialSongDelay = 0;
-	//	m_initialNoteDelay = 0;
-	//}
-	//// Offset -0.1, noteData starts 0.1 before song
-	//else if (finalOffset < 0)
-	//{
-	//	m_initialSongDelay = finalOffset;
-	//	m_initialNoteDelay = 0;
-	//}
-	//// Offset 0.1, notedata starts 0.1 after song
-	//else if (finalOffset > 0)
-	//{
-	//	m_initialSongDelay = 0;
-	//	m_initialNoteDelay = finalOffset;
-	//}
-
-	//// Init playing
-	//m_songPlaying = true;
-	//m_endOfNotes = false;
-	//m_songStarted = false;
-
-
-	//return;
-
-	// Old -V
 	
 	// Case 0: Positive or 0 offset
 	if (songOffset >= 0)

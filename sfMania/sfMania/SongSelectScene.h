@@ -32,7 +32,7 @@ public:
 	const float SCROLL_TIME = 0.15f;
 	const int PANEL_HEIGHT = 50;
 	const int PANEL_PADDING = 10;
-	const float TIME_BEFORE_SONG = 0.5f;
+	const float TIME_BEFORE_SONG = 0.15f;
 
 private:
 	// Displays

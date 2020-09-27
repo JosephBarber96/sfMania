@@ -36,8 +36,8 @@ void GameManager::Init()
 	// Init internal components
 	instance = this;
 	m_clock = new sf::Clock();
-	m_window = new sf::RenderWindow(sf::VideoMode(800, 600), "sf_mania");
-	Settings::SetDefaultOnStartup(eResolution::x800y600, 800, 600, false);
+	m_window = new sf::RenderWindow(sf::VideoMode(1024, 768), "sf_mania");
+	Settings::SetDefaultOnStartup(eResolution::x1024y786, 1024, 768, false);
 
 	// Init external components and managers
 	GameObject::Init();

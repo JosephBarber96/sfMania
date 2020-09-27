@@ -17,6 +17,7 @@ class StepMap;
 class Measure;
 class PauseMenu;
 class HealthBar;
+class ProgressBar;
 enum eHit;
 
 enum eLeaveSongReason
@@ -109,6 +110,7 @@ private:
 	// Gameplay vars
 	Score* m_score;
 	HealthBar* m_healthBar;
+	ProgressBar* m_progressBar;
 
 
 	// Receptors

@@ -11,7 +11,7 @@ HealthBar::HealthBar(int maxHealth)
 	m_maxHealth = maxHealth;
 	m_health = m_maxHealth / 2;
 
-	m_maxWidth = Settings::WindowX() * 0.4f;
+	m_maxWidth = Settings::WindowX() * 0.75f;
 	m_realWidth = m_maxWidth;
 
 	m_height = Settings::WindowY() * 0.05f;
@@ -45,6 +45,20 @@ void HealthBar::OnSetPosition()
 {
 	m_healthBarBack.setPosition(m_x, m_y);
 	m_healthBar.setPosition(m_x, m_y);
+}
+
+// --
+
+void HealthBar::SetupPosition()
+{
+	float middle = Settings::WindowX() / 2;
+	float barWidth = m_maxWidth;
+
+	float xPos = (middle - barWidth / 2);
+	float yPos = Settings::WindowY() * 0.05f;
+
+	m_healthBar.setPosition(xPos, yPos);
+	m_healthBarBack.setPosition(xPos, yPos);
 }
 
 void HealthBar::IncreaseHealth(int health)
