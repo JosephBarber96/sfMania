@@ -14,6 +14,7 @@
 #include "Settings.h"
 #include "BeatmapDifficultyPanel.h"
 #include "AudioManager.h"
+#include "AssetManager.h"
 
 SongSelectScene::SongSelectScene()
 {
@@ -227,7 +228,7 @@ void SongSelectScene::Scroll(eScrollDir dir)
 		m_songPanels[i]->Scroll(dir, SCROLL_TIME, PANEL_HEIGHT + PANEL_PADDING);
 	}
 
-	AudioManager::PlaySound(eSounds::scroll);
+	AudioManager::PlaySound(eSound::scroll);
 }
 
 void SongSelectScene::OnScrollFinished()

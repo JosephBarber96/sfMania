@@ -3,7 +3,7 @@
 #include "MainMenuScene.h"
 #include "Input.h"
 #include "GameManager.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Utility.h"
 #include "Settings.h"
 #include "AudioManager.h"
@@ -16,41 +16,41 @@ void MainMenuScene::InitScene()
 {
 	// Menu background
 	m_bgTexture = new sf::Texture();
-	m_bgTexture->loadFromFile(ResourceManager::AssetPath() + "Sprites\\menuBackground.png");
+	m_bgTexture->loadFromFile(AssetManager::AssetPath() + "Sprites\\menuBackground.png");
 	m_bgSprite = new sf::Sprite();
 	m_bgSprite->setTexture(*m_bgTexture);
 	m_bgSprite->setScale(Utility::GetScaleForTargetSize(m_bgTexture, Settings::WindowX(), Settings::WindowY()));
 
 	int titleFontSize = 72;
 	m_Title = sf::Text();
-	Utility::SetupText(&m_Title, ResourceManager::GetFont(eFont::bold), "SFMania", titleFontSize, sf::Color::White, sf::Color::Black, 2);
+	Utility::SetupText(&m_Title, AssetManager::GetFont(eFont::bold), "SFMania", titleFontSize, sf::Color::White, sf::Color::Black, 2);
 	m_Title.setPosition(Utility::NormalizedToScreen(&m_Title, 0.5f, 0.25f));
 
 	// Text
 	int fontSize = 35;
 
 	m_Start = sf::Text();
-	Utility::SetupText(&m_Start, ResourceManager::GetFont(eFont::bold), "Start", fontSize, sf::Color::White, sf::Color::Black, 2);
+	Utility::SetupText(&m_Start, AssetManager::GetFont(eFont::bold), "Start", fontSize, sf::Color::White, sf::Color::Black, 2);
 	m_Start.setPosition(Settings::WindowX() * 0.5f - m_Start.getGlobalBounds().width / 2, GetYForOption(eMainMenuOptions::option_start));
 
 	m_Options = sf::Text();
-	Utility::SetupText(&m_Options, ResourceManager::GetFont(eFont::bold), "Options", fontSize, sf::Color::White, sf::Color::Black, 2);
+	Utility::SetupText(&m_Options, AssetManager::GetFont(eFont::bold), "Options", fontSize, sf::Color::White, sf::Color::Black, 2);
 	m_Options.setPosition(Settings::WindowX() * 0.5f - m_Options.getGlobalBounds().width / 2, GetYForOption(eMainMenuOptions::option_options));
 
 	m_Quit = sf::Text();
-	Utility::SetupText(&m_Quit, ResourceManager::GetFont(eFont::bold), "Quit", fontSize, sf::Color::White, sf::Color::Black, 2);
+	Utility::SetupText(&m_Quit, AssetManager::GetFont(eFont::bold), "Quit", fontSize, sf::Color::White, sf::Color::Black, 2);
 	m_Quit.setPosition(Settings::WindowX() * 0.5f - m_Quit.getGlobalBounds().width / 2, GetYForOption(eMainMenuOptions::option_quit));
 
 	// Menu arrow
 	m_menuArrowRightTexture = new sf::Texture();
-	m_menuArrowRightTexture->loadFromFile(ResourceManager::AssetPath() + "Sprites\\MenuArrowRight.png");
+	m_menuArrowRightTexture->loadFromFile(AssetManager::AssetPath() + "Sprites\\MenuArrowRight.png");
 	m_menuArrowRightSprite = new sf::Sprite();
 	m_menuArrowRightSprite->setTexture(*m_menuArrowRightTexture);
 	m_menuArrowRightSprite->setPosition(Settings::WindowX() * 0.3f, GetYForOption(eMainMenuOptions::option_start));
 	m_menuArrowRightSprite->setScale(0.75f, 0.75f);
 
 	m_menuArrowLeftTexture = new sf::Texture();
-	m_menuArrowLeftTexture->loadFromFile(ResourceManager::AssetPath() + "Sprites\\MenuArrowLeft.png");
+	m_menuArrowLeftTexture->loadFromFile(AssetManager::AssetPath() + "Sprites\\MenuArrowLeft.png");
 	m_menuArrowLeftSprite = new sf::Sprite();
 	m_menuArrowLeftSprite->setTexture(*m_menuArrowLeftTexture);
 	m_menuArrowLeftSprite->setPosition(Settings::WindowX() * 0.7f - m_menuArrowLeftSprite->getGlobalBounds().width, GetYForOption(eMainMenuOptions::option_start));
@@ -92,7 +92,7 @@ void MainMenuScene::UpdateScene()
 			break;
 		}
 
-		AudioManager::PlaySound(eSounds::menuConfirm);
+		AudioManager::PlaySound(eSound::menuConfirm);
 	}
 
 	if (Input::Up.m_keyPressed)
@@ -154,7 +154,7 @@ void MainMenuScene::OnMenuChange()
 {
 	m_menuArrowRightSprite->setPosition(m_menuArrowRightSprite->getPosition().x, GetYForOption(m_currentOption));
 	m_menuArrowLeftSprite->setPosition(m_menuArrowLeftSprite->getPosition().x, GetYForOption(m_currentOption));
-	AudioManager::PlaySound(eSounds::menuSelect);
+	AudioManager::PlaySound(eSound::menuSelect);
 }
 
 float MainMenuScene::GetYForOption(int index)

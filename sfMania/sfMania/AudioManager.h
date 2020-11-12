@@ -4,20 +4,13 @@
 
 class Song;
 
-enum eSounds
-{
-	menuConfirm,
-	menuCancel,
-	menuSelect,
-	sceneTransition,
-	scroll,
-};
+enum eSound;
 
 class AudioManager
 {
 public:
 	static void Init();
-	static void PlaySound(eSounds sound);
+	static void PlaySound(eSound sound);
 	static void PlayMusic(Song* song);
 	static void StopMusic();
 

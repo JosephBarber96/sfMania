@@ -1,7 +1,7 @@
 #include "SongPanel.h"
 
 #include "Song.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "SongSelectScene.h"
 #include "GameManager.h"
 #include "Maths.h"
@@ -10,7 +10,7 @@
 
 SongPanel::SongPanel()
 {
-	m_songName = new sf::Text("", *ResourceManager::GetFont(eFont::big), 15);
+	m_songName = new sf::Text("", *AssetManager::GetFont(eFont::big), 15);
 	m_songName->setFillColor(sf::Color::White);
 }
 

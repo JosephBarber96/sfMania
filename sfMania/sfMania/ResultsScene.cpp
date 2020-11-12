@@ -7,7 +7,7 @@
 #include "Score.h"
 #include "Input.h"
 #include "Utility.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 
 Score* ResultsScene::score;
 
@@ -74,7 +74,7 @@ void ResultsScene::InitScene()
 		fillColor = (sf::Color::Red);
 		break;
 	}
-	Utility::SetupText(&m_scoreText, ResourceManager::GetFont(eFont::big), scoreString, 300, fillColor, sf::Color::Black, 3, 50, -25);
+	Utility::SetupText(&m_scoreText, AssetManager::GetFont(eFont::big), scoreString, 300, fillColor, sf::Color::Black, 3, 50, -25);
 
 
 	float startTextY = 0.55f;
@@ -86,31 +86,31 @@ void ResultsScene::InitScene()
 
 	// MaxCombo
 	m_maxComboTitle = sf::Text();
-	Utility::SetupText(&m_maxComboTitle, ResourceManager::GetFont(eFont::big), "Max combo:", fontSize, sf::Color::Cyan, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
+	Utility::SetupText(&m_maxComboTitle, AssetManager::GetFont(eFont::big), "Max combo:", fontSize, sf::Color::Cyan, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
 	m_maxComboTitle.setPosition(titleX - m_maxComboTitle.getGlobalBounds().width, m_maxComboTitle.getPosition().y);
 	m_maxCombo = sf::Text();
-	Utility::SetupText(&m_maxCombo, ResourceManager::GetFont(eFont::big), std::to_string(score->GetMaxCombo()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
+	Utility::SetupText(&m_maxCombo, AssetManager::GetFont(eFont::big), std::to_string(score->GetMaxCombo()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
 
 	// Perfect notes
 	m_perfectNotesTitle = sf::Text();
-	Utility::SetupText(&m_perfectNotesTitle, ResourceManager::GetFont(eFont::big), "Perfect:", fontSize, sf::Color::Yellow, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
+	Utility::SetupText(&m_perfectNotesTitle, AssetManager::GetFont(eFont::big), "Perfect:", fontSize, sf::Color::Yellow, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
 	m_perfectNotesTitle.setPosition(titleX - m_perfectNotesTitle.getGlobalBounds().width, m_perfectNotesTitle.getPosition().y);
 	m_perfectNotes = sf::Text();
-	Utility::SetupText(&m_perfectNotes, ResourceManager::GetFont(eFont::big), std::to_string(score->GetPerfectNotes()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
+	Utility::SetupText(&m_perfectNotes, AssetManager::GetFont(eFont::big), std::to_string(score->GetPerfectNotes()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
 	
 	// Great notes
 	m_greatNotesTitle = sf::Text();
-	Utility::SetupText(&m_greatNotesTitle, ResourceManager::GetFont(eFont::big), "Great:", fontSize, sf::Color::Green, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
+	Utility::SetupText(&m_greatNotesTitle, AssetManager::GetFont(eFont::big), "Great:", fontSize, sf::Color::Green, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
 	m_greatNotesTitle.setPosition(titleX - m_greatNotesTitle.getGlobalBounds().width, m_greatNotesTitle.getPosition().y);
 	m_greatNotes = sf::Text();
-	Utility::SetupText(&m_greatNotes, ResourceManager::GetFont(eFont::big), std::to_string(score->GetGreatNotes()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
+	Utility::SetupText(&m_greatNotes, AssetManager::GetFont(eFont::big), std::to_string(score->GetGreatNotes()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
 
 	// Misses
 	m_missNotesTitle = sf::Text();
-	Utility::SetupText(&m_missNotesTitle, ResourceManager::GetFont(eFont::big), "Misses:", fontSize, sf::Color::Red, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
+	Utility::SetupText(&m_missNotesTitle, AssetManager::GetFont(eFont::big), "Misses:", fontSize, sf::Color::Red, sf::Color::Black, 2, 0, Settings::WindowY() * (startTextY + (i * incrementY)));
 	m_missNotesTitle.setPosition(titleX - m_missNotesTitle.getGlobalBounds().width, m_missNotesTitle.getPosition().y);
 	m_missNotes = sf::Text();
-	Utility::SetupText(&m_missNotes, ResourceManager::GetFont(eFont::big), std::to_string(score->GetMissNotes()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
+	Utility::SetupText(&m_missNotes, AssetManager::GetFont(eFont::big), std::to_string(score->GetMissNotes()), fontSize, sf::Color::White, sf::Color::Black, 2, actualX, Settings::WindowY() * (startTextY + (i++ * incrementY)));
 
 	// Box
 	m_scoreBox = sf::RectangleShape();

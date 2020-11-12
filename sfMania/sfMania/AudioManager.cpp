@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "AudioManager.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Song.h"
 
 AudioManager* AudioManager::instance;
@@ -23,9 +23,9 @@ void AudioManager::Init()
 	instance->m_music->setVolume(50);
 }
 
-void AudioManager::PlaySound(eSounds sound)
+void AudioManager::PlaySound(eSound sound)
 {
-	instance->m_sound.setBuffer(*ResourceManager::GetSound(sound));
+	instance->m_sound.setBuffer(*AssetManager::GetSound(sound));
 	instance->m_sound.play();
 }
 

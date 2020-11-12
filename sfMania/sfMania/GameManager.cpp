@@ -7,7 +7,7 @@
 #include "Song.h"
 #include "Settings.h"
 
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "AudioManager.h"
 
 // Scenes
@@ -41,13 +41,13 @@ void GameManager::Init()
 
 	// Init external components and managers
 	GameObject::Init();
-	ResourceManager::Init();
+	AssetManager::Init();
 	AudioManager::Init();
 	Input::Init();
 
 	// Render "Now Loading" text
 	sf::Text text = sf::Text();
-	text.setFont(*ResourceManager::GetFont(eFont::small));
+	text.setFont(*AssetManager::GetFont(eFont::small));
 	text.setString("Loading songs...");
 	text.setPosition((Settings::WindowX() / 2) - text.getGlobalBounds().width / 2, 
 		(Settings::WindowY() / 2) - text.getGlobalBounds().height/2);

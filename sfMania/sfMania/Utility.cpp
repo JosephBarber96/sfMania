@@ -12,7 +12,7 @@
 #include "Measure.h"
 #include "BPM.h"
 #include "Settings.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 
 namespace Utility
 {
@@ -75,7 +75,7 @@ namespace Utility
 
 	void SetupText(sf::Text* text, eFont font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x, int y)
 	{
-		SetupText(text, ResourceManager::GetFont(font), textString, size, fillColour, outlineColour, outlineThickness, x, y);
+		SetupText(text, AssetManager::GetFont(font), textString, size, fillColour, outlineColour, outlineThickness, x, y);
 	}
 
 	void SetupText(sf::Text* text, sf::Font* font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x, int y)

@@ -1,7 +1,7 @@
 #include "BeatmapDifficultyPanel.h"
 
 #include "StepMap.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Utility.h"
 
 

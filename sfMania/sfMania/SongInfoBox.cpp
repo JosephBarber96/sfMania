@@ -1,7 +1,7 @@
 #include "SongInfoBox.h"
 
 #include "Song.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Utility.h"
 #include "BPM.h"
 
@@ -13,21 +13,21 @@ SongInfoBox::SongInfoBox()
 
 	// Artist
 	m_artistHeading = new sf::Text();
-	Utility::SetupText(m_artistHeading, ResourceManager::GetFont(eFont::big), "Artist: ", bf, sf::Color::White, sf::Color::Black, outlineThickness);
+	Utility::SetupText(m_artistHeading, AssetManager::GetFont(eFont::big), "Artist: ", bf, sf::Color::White, sf::Color::Black, outlineThickness);
 	m_artist = new sf::Text();
-	Utility::SetupText(m_artist, ResourceManager::GetFont(eFont::small), "@", sf, sf::Color::White, sf::Color::Black, outlineThickness);
+	Utility::SetupText(m_artist, AssetManager::GetFont(eFont::small), "@", sf, sf::Color::White, sf::Color::Black, outlineThickness);
 
 	// Song
 	m_songHeading = new sf::Text();
-	Utility::SetupText(m_songHeading, ResourceManager::GetFont(eFont::big), "Song: ", bf, sf::Color::White, sf::Color::Black, outlineThickness);
+	Utility::SetupText(m_songHeading, AssetManager::GetFont(eFont::big), "Song: ", bf, sf::Color::White, sf::Color::Black, outlineThickness);
 	m_song = new sf::Text();
-	Utility::SetupText(m_song, ResourceManager::GetFont(eFont::small), "@", sf, sf::Color::White, sf::Color::Black, outlineThickness);
+	Utility::SetupText(m_song, AssetManager::GetFont(eFont::small), "@", sf, sf::Color::White, sf::Color::Black, outlineThickness);
 
 	//BPM
 	m_bpmHeading = new sf::Text();
-	Utility::SetupText(m_bpmHeading, ResourceManager::GetFont(eFont::big), "BPM: ", bf, sf::Color::White, sf::Color::Black, outlineThickness);
+	Utility::SetupText(m_bpmHeading, AssetManager::GetFont(eFont::big), "BPM: ", bf, sf::Color::White, sf::Color::Black, outlineThickness);
 	m_bpm = new sf::Text();
-	Utility::SetupText(m_bpm, ResourceManager::GetFont(eFont::small), "@", sf, sf::Color::White, sf::Color::Black, outlineThickness);
+	Utility::SetupText(m_bpm, AssetManager::GetFont(eFont::small), "@", sf, sf::Color::White, sf::Color::Black, outlineThickness);
 }
 
 

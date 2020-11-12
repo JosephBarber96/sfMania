@@ -1,6 +1,6 @@
 #include "SettingsScene.h"
 
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "GameManager.h"
 #include "Input.h"
 #include "Settings.h"
@@ -31,11 +31,11 @@ void SettingsScene::InitScene()
 	int stsz = 25; // Small text size
 
 	// Setup text
-	Utility::SetupText(&m_heading, ResourceManager::GetFont(eFont::big), "Settings.", ttsz, sf::Color::White, sf::Color::Black, 3);	
-	Utility::SetupText(&m_resolutionHeadingText, ResourceManager::GetFont(eFont::big), "Resolution:", htsz, sf::Color::White, sf::Color::Black, 3);
-	Utility::SetupText(&m_currentResolutionText, ResourceManager::GetFont(eFont::small), Utility::GetStringForResolution(Settings::Resolution()), stsz, sf::Color::White, sf::Color::Black, 3);
-	Utility::SetupText(&m_fullscreenText, ResourceManager::GetFont(eFont::big), "Toggle Fullscreen", htsz, sf::Color::White, sf::Color::Black, 3);
-	Utility::SetupText(&m_goBackText, ResourceManager::GetFont(eFont::big), "Go back.", htsz, sf::Color::White, sf::Color::Black, 3);
+	Utility::SetupText(&m_heading, AssetManager::GetFont(eFont::big), "Settings.", ttsz, sf::Color::White, sf::Color::Black, 3);	
+	Utility::SetupText(&m_resolutionHeadingText, AssetManager::GetFont(eFont::big), "Resolution:", htsz, sf::Color::White, sf::Color::Black, 3);
+	Utility::SetupText(&m_currentResolutionText, AssetManager::GetFont(eFont::small), Utility::GetStringForResolution(Settings::Resolution()), stsz, sf::Color::White, sf::Color::Black, 3);
+	Utility::SetupText(&m_fullscreenText, AssetManager::GetFont(eFont::big), "Toggle Fullscreen", htsz, sf::Color::White, sf::Color::Black, 3);
+	Utility::SetupText(&m_goBackText, AssetManager::GetFont(eFont::big), "Go back.", htsz, sf::Color::White, sf::Color::Black, 3);
 
 	// Highlight
 	m_highlight = sf::RectangleShape();

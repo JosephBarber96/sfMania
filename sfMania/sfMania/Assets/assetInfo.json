@@ -1,0 +1,48 @@
+{
+  "fonts": [
+    {
+      "filepath": "Assets\\Fonts\\theboldfont.ttf",
+      "font": 0
+    },
+    {
+      "filepath": "Assets\\Fonts\\theboldfont.ttf",
+      "font": 1
+    },
+    {
+      "filepath": "Assets\\Fonts\\theboldfont.ttf",
+      "font": 2
+    }
+  ],
+  "sounds": [
+    {
+      "filepath": "Assets\\Sounds\\menu_confirm.wav",
+      "sound": 0
+    },
+    {
+      "filepath": "Assets\\Sounds\\menu_select.wav",
+      "sound": 2
+    },
+    {
+      "filepath": "Sounds\\menu_scroll.wav",
+      "sound": 4
+    }
+  ],
+  "textures": [
+    {
+      "filepath": "Assets\\Sprites\\Arrow_Left.png",
+      "texture": 0
+    },
+    {
+      "filepath": "Assets\\Sprites\\Arrow_Down.png",
+      "texture": 1
+    },
+    {
+      "filepath": "Assets\\Sprites\\Arrow_Up.png",
+      "texture": 2
+    },
+    {
+      "filepath": "Assets\\Sprites\\Arrow_Right.png",
+      "texture": 3
+    }
+  ]
+}

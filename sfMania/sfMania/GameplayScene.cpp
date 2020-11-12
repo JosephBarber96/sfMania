@@ -4,7 +4,7 @@
 #include "GameplayScene.h"
 
 #include "GameManager.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Utility.h"
 #include "Settings.h"
 #include "ResultsScene.h"
@@ -123,7 +123,7 @@ void GameplayScene::InitScene()
 
 		// Combo text
 		m_comboText = new sf::Text();
-		m_comboText->setFont(*ResourceManager::GetFont(eFont::bold));
+		m_comboText->setFont(*AssetManager::GetFont(eFont::bold));
 		m_comboTextPos = sf::Vector2i(
 			(Settings::WindowX() / 2) - (m_comboText->getGlobalBounds().width / 2),
 			(Settings::WindowY() * 0.75f) - (Settings::WindowY() / 2) - (m_comboText->getGlobalBounds().height / 2)
@@ -138,7 +138,7 @@ void GameplayScene::InitScene()
 
 		// Hit text
 		m_hitText = new sf::Text();
-		m_hitText->setFont(*ResourceManager::GetFont(eFont::bold));
+		m_hitText->setFont(*AssetManager::GetFont(eFont::bold));
 		m_hitTextPos = sf::Vector2i(
 			(Settings::WindowX() / 2) - (m_hitText->getGlobalBounds().width / 2),
 			(Settings::WindowY() / 2) - (m_hitText->getGlobalBounds().height / 2)

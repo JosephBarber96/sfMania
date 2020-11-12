@@ -2,7 +2,7 @@
 
 #include "Settings.h"
 #include "Utility.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Input.h"
 #include "AudioManager.h"
 
@@ -99,5 +99,5 @@ void PauseMenu::OnOptionChanged()
 
 	m_highlight.setPosition(pos);
 
-	AudioManager::PlaySound(eSounds::menuSelect);
+	AudioManager::PlaySound(eSound::menuSelect);
 }

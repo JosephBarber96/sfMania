@@ -5,7 +5,7 @@
 #include "Receptor.h"
 
 #include "GameManager.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 #include "Settings.h"
 #include "Maths.h"
 #include "GameplayScene.h"
@@ -82,7 +82,7 @@ void Note::BeginDrop(int x, int column)
 	m_currentColumn = column;
 
 	// Set sprite texture
-	m_sprite->setTexture(*ResourceManager::GetNoteTexture(column));
+	m_sprite->setTexture(*AssetManager::GetNoteTexture(column));
 
 	// Elapsed time
 	m_elapsedFallTime = 0.0f;

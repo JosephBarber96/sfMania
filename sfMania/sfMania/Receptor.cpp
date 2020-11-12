@@ -5,7 +5,7 @@
 #include "GameManager.h"
 #include "Settings.h"
 #include "Maths.h"
-#include "ResourceManager.h"
+#include "AssetManager.h"
 
 Receptor::Receptor()
 {
@@ -70,8 +70,8 @@ void Receptor::InitSelf(int column, int xPos)
 	SetPosition(xPos, GetReceptorY());
 
 	// Setup textures
-	std::string pressed = ResourceManager::AssetPath() + "Sprites\\";
-	std::string unpressed = ResourceManager::AssetPath() + "Sprites\\";
+	std::string pressed = AssetManager::AssetPath() + "Sprites\\";
+	std::string unpressed = AssetManager::AssetPath() + "Sprites\\";
 	switch (column)
 	{
 		// Left
