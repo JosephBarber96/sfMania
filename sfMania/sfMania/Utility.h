@@ -22,6 +22,7 @@ namespace Utility
 	void SetupText(sf::Text* text, sf::Font* font, std::string textString, int size, sf::Color fillColour, sf::Color outlineColour, int outlineThickness, int x = 0, int y = 0);
 	sf::Color UnhighlightedColour();
 	sf::Color HighlightedColour();
+	sf::Color Lerp(sf::Color a, sf::Color b, float t);
 
 	// SFMania util
 	std::string GetStringForResolution(eResolution res);

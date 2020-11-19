@@ -31,7 +31,6 @@ private:
 	int m_currentOption;
 
 	// Menu Background
-	sf::Texture* m_bgTexture;
 	sf::Sprite* m_bgSprite;
 
 	// Title
@@ -42,10 +41,8 @@ private:
 	sf::Text m_Options;
 	sf::Text m_Quit;
 
-	// Arrow
-	sf::Texture* m_menuArrowRightTexture;
+	// Arrows
 	sf::Sprite* m_menuArrowRightSprite;
-	sf::Texture* m_menuArrowLeftTexture;
 	sf::Sprite* m_menuArrowLeftSprite;
 
 	void MenuUp();

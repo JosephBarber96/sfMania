@@ -15,11 +15,9 @@ MainMenuScene::~MainMenuScene() {}
 void MainMenuScene::InitScene()
 {
 	// Menu background
-	m_bgTexture = new sf::Texture();
-	m_bgTexture->loadFromFile(AssetManager::AssetPath() + "Sprites\\menuBackground.png");
 	m_bgSprite = new sf::Sprite();
-	m_bgSprite->setTexture(*m_bgTexture);
-	m_bgSprite->setScale(Utility::GetScaleForTargetSize(m_bgTexture, Settings::WindowX(), Settings::WindowY()));
+	m_bgSprite->setTexture(*AssetManager::GetTexture(eTexture::main_menu_bg));
+	m_bgSprite->setScale(Utility::GetScaleForTargetSize(AssetManager::GetTexture(eTexture::main_menu_bg), Settings::WindowX(), Settings::WindowY()));
 
 	int titleFontSize = 72;
 	m_Title = sf::Text();
@@ -41,18 +39,14 @@ void MainMenuScene::InitScene()
 	Utility::SetupText(&m_Quit, AssetManager::GetFont(eFont::bold), "Quit", fontSize, sf::Color::White, sf::Color::Black, 2);
 	m_Quit.setPosition(Settings::WindowX() * 0.5f - m_Quit.getGlobalBounds().width / 2, GetYForOption(eMainMenuOptions::option_quit));
 
-	// Menu arrow
-	m_menuArrowRightTexture = new sf::Texture();
-	m_menuArrowRightTexture->loadFromFile(AssetManager::AssetPath() + "Sprites\\MenuArrowRight.png");
+	// Menu arrows
 	m_menuArrowRightSprite = new sf::Sprite();
-	m_menuArrowRightSprite->setTexture(*m_menuArrowRightTexture);
+	m_menuArrowRightSprite->setTexture(*AssetManager::GetTexture(eTexture::main_menu_arrow_right));
 	m_menuArrowRightSprite->setPosition(Settings::WindowX() * 0.3f, GetYForOption(eMainMenuOptions::option_start));
 	m_menuArrowRightSprite->setScale(0.75f, 0.75f);
 
-	m_menuArrowLeftTexture = new sf::Texture();
-	m_menuArrowLeftTexture->loadFromFile(AssetManager::AssetPath() + "Sprites\\MenuArrowLeft.png");
 	m_menuArrowLeftSprite = new sf::Sprite();
-	m_menuArrowLeftSprite->setTexture(*m_menuArrowLeftTexture);
+	m_menuArrowLeftSprite->setTexture(*AssetManager::GetTexture(eTexture::main_menu_arrow_left));
 	m_menuArrowLeftSprite->setPosition(Settings::WindowX() * 0.7f - m_menuArrowLeftSprite->getGlobalBounds().width, GetYForOption(eMainMenuOptions::option_start));
 	m_menuArrowLeftSprite->setScale(0.75f, 0.75f);
 
@@ -62,12 +56,8 @@ void MainMenuScene::InitScene()
 
 void MainMenuScene::UnloadScene()
 {
-	delete m_bgTexture;
 	delete m_bgSprite;
-
-	delete m_menuArrowRightTexture;
 	delete m_menuArrowRightSprite;
-	delete m_menuArrowLeftTexture;
 	delete m_menuArrowLeftSprite;
 }
 

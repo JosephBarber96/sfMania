@@ -13,6 +13,7 @@
 #include "BPM.h"
 #include "Settings.h"
 #include "AssetManager.h"
+#include "Maths.h"
 
 namespace Utility
 {
@@ -92,7 +93,14 @@ namespace Utility
 	sf::Color UnhighlightedColour() { return sf::Color(0, 0, 0, 225); }
 	sf::Color HighlightedColour() { return sf::Color(255, 255, 255, 128); }
 
+	sf::Color Lerp(sf::Color a, sf::Color b, float t)
+	{
+		float _r = Maths::Lerp(a.r, b.r, t);
+		float _g = Maths::Lerp(a.g, b.g, t);
+		float _b = Maths::Lerp(a.b, b.b, t);
 
+		return sf::Color(_r, _g, _b);
+	}
 
 
 	//------------------------------------------

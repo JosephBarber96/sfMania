@@ -12,7 +12,6 @@ public:
 	static std::vector<GameObject*> GameObjects;
 	static void Init();
 
-	virtual void Start();
 	virtual void Update();
 	virtual void RenderSelf(sf::RenderWindow* window) = 0;
 

@@ -1,48 +1,104 @@
 {
-  "fonts": [
-    {
-      "filepath": "Assets\\Fonts\\theboldfont.ttf",
-      "font": 0
-    },
-    {
-      "filepath": "Assets\\Fonts\\theboldfont.ttf",
-      "font": 1
-    },
-    {
-      "filepath": "Assets\\Fonts\\theboldfont.ttf",
-      "font": 2
-    }
-  ],
-  "sounds": [
-    {
-      "filepath": "Assets\\Sounds\\menu_confirm.wav",
-      "sound": 0
-    },
-    {
-      "filepath": "Assets\\Sounds\\menu_select.wav",
-      "sound": 2
-    },
-    {
-      "filepath": "Sounds\\menu_scroll.wav",
-      "sound": 4
-    }
-  ],
-  "textures": [
-    {
-      "filepath": "Assets\\Sprites\\Arrow_Left.png",
-      "texture": 0
-    },
-    {
-      "filepath": "Assets\\Sprites\\Arrow_Down.png",
-      "texture": 1
-    },
-    {
-      "filepath": "Assets\\Sprites\\Arrow_Up.png",
-      "texture": 2
-    },
-    {
-      "filepath": "Assets\\Sprites\\Arrow_Right.png",
-      "texture": 3
-    }
-  ]
+   "fonts":[
+      {
+         "filepath":"Assets\\Fonts\\theboldfont.ttf",
+         "font":0
+      },
+      {
+         "filepath":"Assets\\Fonts\\theboldfont.ttf",
+         "font":1
+      },
+      {
+         "filepath":"Assets\\Fonts\\theboldfont.ttf",
+         "font":2
+      }
+   ],
+   "sounds":[
+      {
+         "filepath":"Assets\\Sounds\\menu_confirm.wav",
+         "sound":0
+      },
+      {
+         "filepath":"Assets\\Sounds\\menu_select.wav",
+         "sound":2
+      },
+      {
+         "filepath":"Sounds\\menu_scroll.wav",
+         "sound":4
+      }
+   ],
+   "animations":[
+	{
+		"filepath": "Assets\\Sprites\\HealthBar.png",
+		"animation": 10,
+		"frames": 48,
+		"width": 640,
+		"height": 64,
+		"xOffset": 0,
+		"yOffset": 64,
+		"frameTime": 0.025
+	}
+   ],
+   "textures":[
+      {
+         "filepath":"Assets\\Sprites\\Arrow_Left.png",
+         "texture":0
+      },
+      {
+         "filepath":"Assets\\Sprites\\Arrow_Down.png",
+         "texture":1
+      },
+      {
+         "filepath":"Assets\\Sprites\\Arrow_Up.png",
+         "texture":2
+      },
+      {
+         "filepath":"Assets\\Sprites\\Arrow_Right.png",
+         "texture":3
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Left_Pressed.png",
+         "texture":10
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Left.png",
+         "texture":11
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Down_Pressed.png",
+         "texture":12
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Down.png",
+         "texture":13
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Up_Pressed.png",
+         "texture":14
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Up.png",
+         "texture":15
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Right_Pressed.png",
+         "texture":16
+      },
+      {
+         "filepath":"Assets\\Sprites\\Receptor_Right.png",
+         "texture":17
+      },
+      {
+         "filepath":"Assets\\Sprites\\menuBackground.png",
+         "texture":100
+      },
+      {
+         "filepath":"Assets\\Sprites\\MenuArrowLeft.png",
+         "texture":101
+      },
+      {
+         "filepath":"Assets\\Sprites\\MenuArrowRight.png",
+         "texture":102
+      }
+   ]
 }

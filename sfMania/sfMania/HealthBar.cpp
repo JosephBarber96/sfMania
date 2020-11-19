@@ -3,28 +3,31 @@
 #include "Settings.h"
 #include "Maths.h"
 #include "GameManager.h"
+#include "AssetManager.h"
+#include "Animation.h"
 
-#include <iostream>
+#include "Utility.h"
+
+const float MAX_NORMALIZED_WIDTH = 0.75;
+const float MAX_NORMALIZED_HEIGHT = 0.075f;
 
 HealthBar::HealthBar(int maxHealth)
 {
 	m_maxHealth = maxHealth;
-	m_health = m_maxHealth / 2;
+	m_health = m_maxHealth;
 
-	m_maxWidth = Settings::WindowX() * 0.75f;
-	m_realWidth = m_maxWidth;
-
-	m_height = Settings::WindowY() * 0.05f;
-	if (m_height < MIN_WIDTH)
-		m_health = MIN_WIDTH;
+	m_barWidth = Settings::WindowX() * MAX_NORMALIZED_WIDTH;
+	m_height = Settings::WindowY() * MAX_NORMALIZED_HEIGHT;
+	m_currentHealthWidth = m_barWidth;
 
 	m_healthBarBack = sf::RectangleShape();
-	m_healthBarBack.setSize(sf::Vector2f(m_maxWidth, m_height));
+	m_healthBarBack.setSize(sf::Vector2f(m_barWidth, m_height));
 	m_healthBarBack.setFillColor(sf::Color(20, 20, 20, 255));
+	m_healthBarBack.setOutlineThickness(2);
+	m_healthBarBack.setOutlineColor(sf::Color::White);
 
-	m_healthBar = sf::RectangleShape();
-	m_healthBar.setPosition(sf::Vector2f(m_maxWidth, m_height));
-	m_healthBar.setFillColor(sf::Color::Green);
+	m_anim = AssetManager::GetAnimation(eAnimation::health_bar);
+	m_anim->SetSize(m_barWidth, m_height);
 	
 	CalculateNewWidth();
 }
@@ -32,19 +35,20 @@ HealthBar::HealthBar(int maxHealth)
 void HealthBar::RenderSelf(sf::RenderWindow* window)
 {
 	window->draw(m_healthBarBack);
-	window->draw(m_healthBar);
+	m_anim->RenderSelf(window);
 }
 
 void HealthBar::Update()
 {
-	m_width = Maths::Lerp(m_width, m_realWidth, GameManager::DeltaTime() * 16.f);
-	m_healthBar.setSize(sf::Vector2f(m_width, m_height));
+	m_currentLerpWidth = Maths::Lerp(m_currentLerpWidth, m_currentHealthWidth, GameManager::DeltaTime() * 16.f);
+	m_anim->SetSize(m_currentLerpWidth, m_height);
+	m_anim->SetColour(Utility::Lerp(sf::Color::Green, sf::Color::Red, 1 - m_normalizedHealth));
 }
 
 void HealthBar::OnSetPosition()
 {
 	m_healthBarBack.setPosition(m_x, m_y);
-	m_healthBar.setPosition(m_x, m_y);
+	m_anim->SetPosition(m_x, m_y);
 }
 
 // --
@@ -52,13 +56,12 @@ void HealthBar::OnSetPosition()
 void HealthBar::SetupPosition()
 {
 	float middle = Settings::WindowX() / 2;
-	float barWidth = m_maxWidth;
 
-	float xPos = (middle - barWidth / 2);
+	float xPos = (middle - m_barWidth / 2);
 	float yPos = Settings::WindowY() * 0.05f;
 
-	m_healthBar.setPosition(xPos, yPos);
 	m_healthBarBack.setPosition(xPos, yPos);
+	m_anim->SetPosition(xPos, yPos);
 }
 
 void HealthBar::IncreaseHealth(int health)
@@ -84,6 +87,6 @@ bool HealthBar::IsDead() const
 
 void HealthBar::CalculateNewWidth()
 {
-	float normalizedHealth = (float)m_health / (float)m_maxHealth;
-	m_realWidth = Maths::Lerp(0, m_maxWidth, normalizedHealth);
+	m_normalizedHealth = (float)m_health / (float)m_maxHealth;
+	m_currentHealthWidth = Maths::Lerp(0, m_barWidth, m_normalizedHealth);
 }

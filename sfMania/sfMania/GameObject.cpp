@@ -10,7 +10,6 @@ GameObject::GameObject()
 	GameObject::GameObjects.push_back(this);
 }
 
-
 GameObject::~GameObject()
 {
 	GameObject::GameObjects.erase(
@@ -21,11 +20,6 @@ GameObject::~GameObject()
 void GameObject::Init()
 {
 	GameObject::GameObjects = std::vector<GameObject*>();
-}
-
-void GameObject::Start()
-{
-
 }
 
 void GameObject::Update()

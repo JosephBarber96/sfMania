@@ -17,8 +17,6 @@ Receptor::Receptor()
 
 Receptor::~Receptor()
 {
-	delete m_textureUp;
-	delete m_textureDown;
 	delete m_sprite;
 }
 
@@ -70,38 +68,32 @@ void Receptor::InitSelf(int column, int xPos)
 	SetPosition(xPos, GetReceptorY());
 
 	// Setup textures
-	std::string pressed = AssetManager::AssetPath() + "Sprites\\";
-	std::string unpressed = AssetManager::AssetPath() + "Sprites\\";
 	switch (column)
 	{
 		// Left
 	case 0:
-		pressed.append("Receptor_Left_Pressed.png");
-		unpressed.append("Receptor_Left.png");
+		m_textureDown = AssetManager::GetTexture(eTexture::receptor_left_pressed);
+		m_textureUp = AssetManager::GetTexture(eTexture::receptor_left);
 		break;
 
 		// Down
 	case 1:
-		pressed.append("Receptor_Down_Pressed.png");
-		unpressed.append("Receptor_Down.png");
+		m_textureDown = AssetManager::GetTexture(eTexture::receptor_down_pressed);
+		m_textureUp = AssetManager::GetTexture(eTexture::receptor_down);
 		break;
 
 		// Up
 	case 2:
-		pressed.append("Receptor_Up_Pressed.png");
-		unpressed.append("Receptor_Up.png");
+		m_textureDown = AssetManager::GetTexture(eTexture::receptor_up_pressed);
+		m_textureUp = AssetManager::GetTexture(eTexture::receptor_up);
 		break;
 
 		// Right
 	case 3:
-		pressed.append("Receptor_Right_Pressed.png");
-		unpressed.append("Receptor_Right.png");
+		m_textureDown = AssetManager::GetTexture(eTexture::receptor_right_pressed);
+		m_textureUp = AssetManager::GetTexture(eTexture::receptor_right);
 		break;
 	}
-
-	// Load textures
-	m_textureDown->loadFromFile(pressed);
-	m_textureUp->loadFromFile(unpressed);
 
 	// Set sprite
 	m_sprite->setTexture(*m_textureUp);
