@@ -8,14 +8,25 @@
 #include "Settings.h"
 #include "AudioManager.h"
 
-MainMenuScene::MainMenuScene() {}
+MainMenuScene::MainMenuScene()
+{
+	m_bgSprite = new sf::Sprite();
+	m_menuArrowRightSprite = new sf::Sprite();
+	m_menuArrowLeftSprite = new sf::Sprite();
+}
 
-MainMenuScene::~MainMenuScene() {}
+
+MainMenuScene::~MainMenuScene()
+{
+	delete m_bgSprite;
+	delete m_menuArrowRightSprite;
+	delete m_menuArrowLeftSprite;
+}
 
 void MainMenuScene::InitScene()
 {
 	// Menu background
-	m_bgSprite = new sf::Sprite();
+
 	m_bgSprite->setTexture(*AssetManager::GetTexture(eTexture::main_menu_bg));
 	m_bgSprite->setScale(Utility::GetScaleForTargetSize(AssetManager::GetTexture(eTexture::main_menu_bg), Settings::WindowX(), Settings::WindowY()));
 
@@ -40,12 +51,10 @@ void MainMenuScene::InitScene()
 	m_Quit.setPosition(Settings::WindowX() * 0.5f - m_Quit.getGlobalBounds().width / 2, GetYForOption(eMainMenuOptions::option_quit));
 
 	// Menu arrows
-	m_menuArrowRightSprite = new sf::Sprite();
 	m_menuArrowRightSprite->setTexture(*AssetManager::GetTexture(eTexture::main_menu_arrow_right));
 	m_menuArrowRightSprite->setPosition(Settings::WindowX() * 0.3f, GetYForOption(eMainMenuOptions::option_start));
 	m_menuArrowRightSprite->setScale(0.75f, 0.75f);
 
-	m_menuArrowLeftSprite = new sf::Sprite();
 	m_menuArrowLeftSprite->setTexture(*AssetManager::GetTexture(eTexture::main_menu_arrow_left));
 	m_menuArrowLeftSprite->setPosition(Settings::WindowX() * 0.7f - m_menuArrowLeftSprite->getGlobalBounds().width, GetYForOption(eMainMenuOptions::option_start));
 	m_menuArrowLeftSprite->setScale(0.75f, 0.75f);
@@ -56,12 +65,8 @@ void MainMenuScene::InitScene()
 
 void MainMenuScene::UnloadScene()
 {
-	delete m_bgSprite;
-	delete m_menuArrowRightSprite;
-	delete m_menuArrowLeftSprite;
+	// todo, cleanup
 }
-
-
 
 void MainMenuScene::UpdateScene()
 {

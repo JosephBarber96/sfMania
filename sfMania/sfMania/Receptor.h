@@ -2,6 +2,8 @@
 
 #include "GameObject.h"
 
+class Animation;
+
 class Receptor : public GameObject
 {
 public:
@@ -17,6 +19,7 @@ public:
 	void InitSelf(int column, int xPos);
 	void Pressed();
 	void Released();
+	void NoteHit();
 
 	// Static
 	static float GetReceptorY();
@@ -26,6 +29,7 @@ private:
 	sf::Texture * m_textureDown;
 	sf::Texture * m_textureUp;
 	sf::Sprite * m_sprite;
+	Animation* m_hitAnim;
 
 	// Press logic
 	bool m_pressed;

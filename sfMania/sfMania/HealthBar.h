@@ -1,7 +1,6 @@
 #pragma once
 #include "GameObject.h"
-
-class Animation;
+#include "Animation.h"
 
 class HealthBar : public GameObject
 {
@@ -34,7 +33,7 @@ private:
 	float m_normalizedHealth;
 
 	sf::RectangleShape m_healthBarBack;
-	Animation* m_anim;
+	Animation m_anim;
 
 	void CalculateNewWidth();
 };

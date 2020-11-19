@@ -6,18 +6,23 @@
 #include "Settings.h"
 #include "Maths.h"
 #include "AssetManager.h"
+#include "Animation.h"
 
 Receptor::Receptor()
 {
 	m_textureDown = new sf::Texture();
 	m_textureUp = new sf::Texture();
 	m_sprite = new sf::Sprite();
+	m_hitAnim = new Animation();
 }
 
 
 Receptor::~Receptor()
 {
+	delete m_textureDown;
+	delete m_textureUp;
 	delete m_sprite;
+	delete m_hitAnim;
 }
 
 
@@ -45,14 +50,18 @@ void Receptor::Update()
 void Receptor::RenderSelf(sf::RenderWindow * window)
 {
 	window->draw(*m_sprite);
+	m_hitAnim->RenderSelf(window);
 }
 
 
 void Receptor::OnSetPosition()
 {
-	m_sprite->setPosition(
-		m_x + m_sprite->getGlobalBounds().width,
-		m_y + m_sprite->getGlobalBounds().height);
+	m_sprite->setPosition(m_x, m_y);
+
+	int sz = m_sprite->getGlobalBounds().width;
+	m_hitAnim->SetSize(sz * 2, sz * 2);
+	m_hitAnim->SetPosition(m_x - sz * 0.5f, m_y - sz * 0.5f);
+	
 }
 
 
@@ -64,8 +73,8 @@ void Receptor::OnSetPosition()
 
 void Receptor::InitSelf(int column, int xPos)
 {
-	// Set pos
-	SetPosition(xPos, GetReceptorY());
+	// Setup anim
+	m_hitAnim->SetupAnimation(AssetManager::GetAnimation(eAnimation::receptor_hit));
 
 	// Setup textures
 	switch (column)
@@ -98,6 +107,9 @@ void Receptor::InitSelf(int column, int xPos)
 	// Set sprite
 	m_sprite->setTexture(*m_textureUp);
 	m_sprite->setOrigin(0, 0);
+
+	// Set pos
+	SetPosition(xPos, GetReceptorY());
 }
 
 void Receptor::Pressed()
@@ -112,6 +124,11 @@ void Receptor::Released()
 {
 	m_sprite->setTexture(*m_textureUp);
 	m_pressed = false;
+}
+
+void Receptor::NoteHit()
+{
+	m_hitAnim->Play();
 }
 
 // Static

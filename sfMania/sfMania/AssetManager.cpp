@@ -101,7 +101,6 @@ void AssetManager::Init()
 	instance->LoadFonts();
 	instance->LoadSounds();
 	instance->LoadSprites();
-	instance->LoadAnimations();
 }
 
 sf::Font* AssetManager::GetFont(eFont font)
@@ -134,9 +133,17 @@ sf::Texture* AssetManager::GetNoteTexture(int column)
 	}
 }
 
-Animation* AssetManager::GetAnimation(eAnimation anim)
+AnimationAsset* AssetManager::GetAnimation(eAnimation anim)
 {
-	return instance->m_animations[anim];
+	for (int i = 0; i < instance->m_assetInfo.animations.size(); i++)
+	{
+		if (instance->m_assetInfo.animations[i].animation == anim)
+		{
+			return &instance->m_assetInfo.animations[i];
+		}
+	}
+
+	return nullptr;
 }
 
 
@@ -175,20 +182,5 @@ void AssetManager::LoadSprites()
 		eTexture texture = m_assetInfo.textures[i].texture;
 		m_textures.insert(std::pair<eTexture, sf::Texture*>(texture, new sf::Texture()));
 		m_textures[texture]->loadFromFile(m_assetInfo.textures[i].filepath);
-	}
-}
-
-void AssetManager::LoadAnimations()
-{
-	m_animations = std::map<eAnimation, Animation*>();
-
-	for (int i = 0; i < m_assetInfo.animations.size(); i++)
-	{
-		Animation* animation = new Animation();
-		animation->SetupAnimation(m_assetInfo.animations[i]);
-
-		eAnimation anim = m_assetInfo.animations[i].animation;
-
-		m_animations.insert(std::pair<eAnimation, Animation*>(anim, animation));
 	}
 }

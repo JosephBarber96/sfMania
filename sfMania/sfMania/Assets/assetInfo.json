@@ -28,6 +28,16 @@
       }
    ],
    "animations":[
+   {
+   		"filepath": "Assets\\Sprites\\Receptor_HitSpark.png",
+		"animation": 0,
+		"frames": 5,
+		"width": 64,
+		"height": 64,
+		"xOffset": 0,
+		"yOffset": 64,
+		"frameTime": 0.05
+   },
 	{
 		"filepath": "Assets\\Sprites\\HealthBar.png",
 		"animation": 10,

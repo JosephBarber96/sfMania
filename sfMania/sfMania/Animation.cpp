@@ -16,6 +16,8 @@ Animation::~Animation()
 
 void Animation::Update()
 {
+	if (!m_isPlaying) { return; }
+
 	m_elapsedFrameTime += GameManager::DeltaTime();
 
 	if (m_elapsedFrameTime > m_frameTime)
@@ -27,7 +29,8 @@ void Animation::Update()
 
 void Animation::RenderSelf(sf::RenderWindow* window)
 {
-	window->draw(m_sprite);
+	if (m_isPlaying)
+		window->draw(m_sprite);
 }
 
 void Animation::OnSetPosition()
@@ -35,24 +38,34 @@ void Animation::OnSetPosition()
 	m_sprite.setPosition(m_x, m_y);
 }
 
-void Animation::SetupAnimation(AnimationAsset asset)
+void Animation::SetupAnimation(AnimationAsset* asset)
 {
-	m_frames = asset.frames;
-	m_width = asset.width;
-	m_height = asset.height;
-	m_xOffset = asset.xOffset;
-	m_yOffset = asset.yOffset;
-	m_frameTime = asset.frameTime;
+	m_frames = asset->frames;
+	m_width = asset->width;
+	m_height = asset->height;
+	m_xOffset = asset->xOffset;
+	m_yOffset = asset->yOffset;
+	m_frameTime = asset->frameTime;
 
-	m_texture.loadFromFile(asset.filepath);
+	m_texture.loadFromFile(asset->filepath);
 	m_sprite.setTexture(m_texture);
 	m_currentTextureRect = sf::IntRect(0, 0, m_width, m_height); //x, y, w, h
 	m_sprite.setTextureRect(m_currentTextureRect);
 }
 
-void Animation::Play()
+void Animation::Play(bool loop)
 {
+	m_isPlaying = true;
+	m_loop = loop;
+	m_elapsedFrameTime = 0;
+	m_currentFrame = 0;
+	m_currentTextureRect = sf::IntRect(0, 0, m_width, m_height); //x, y, w, h
+	m_sprite.setTextureRect(m_currentTextureRect);
+}
 
+void Animation::Stop()
+{
+	m_isPlaying = false;
 }
 
 void Animation::SetSize(int newWidth, int newHeight)
@@ -81,6 +94,11 @@ void Animation::AdvanceFrame()
 		m_currentFrame = 0;
 		m_currentTextureRect.left = 0;
 		m_currentTextureRect.top = 0;
+
+		if (!m_loop)
+		{
+			m_isPlaying = false;
+		}
 	}
 
 	m_sprite.setTextureRect(m_currentTextureRect);

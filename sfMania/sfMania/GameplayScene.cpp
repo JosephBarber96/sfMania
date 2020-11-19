@@ -56,11 +56,40 @@ GameplayScene::GameplayScene()
 	m_notes = std::vector<Note*>();
 	m_longNotes = std::vector<LongNote*>();
 	m_activeLongNotes = std::array<LongNote*, 4>();
+	m_receptors = std::array<Receptor*, 4>();
+
 }
 
 
 GameplayScene::~GameplayScene()
 {
+	// Delete heap-allocated notes
+	int sz = m_notes.size();
+	for (int i = sz - 1; i > 0; i--)
+	{
+		delete m_notes[i];
+		m_notes.erase(m_notes.begin() + i);
+	}
+	// Delete heap-allocated longNotes
+	sz = m_longNotes.size();
+	for (int i = sz - 1; i > 0; i--)
+	{
+		delete m_longNotes[i];
+		m_longNotes.erase(m_longNotes.begin() + i);
+	}
+
+	// Delete heap objects
+	for (int i = 0; i < 4; i++)
+		delete m_receptors[i];
+	delete m_songMusic;
+	delete m_backgroundTexture;
+	delete m_backgroundSprite;
+	delete m_playBox;
+	delete m_comboText;
+	delete m_hitText;
+	delete m_pauseMenu;
+	delete m_healthBar;
+	delete m_progressBar;
 }
 
 
@@ -80,14 +109,11 @@ void GameplayScene::InitScene()
 	m_currentSong = GameManager::GetCurrentSong();
 
 	// Init receptors
-	m_receptorLeft = new Receptor();
-	m_receptorLeft->InitSelf(0, GetXForColumn(0));
-	m_receptorLeftMid = new Receptor();
-	m_receptorLeftMid->InitSelf(1, GetXForColumn(1));
-	m_receptorRightMid = new Receptor();
-	m_receptorRightMid->InitSelf(2, GetXForColumn(2));
-	m_receptorRight = new Receptor();
-	m_receptorRight->InitSelf(3, GetXForColumn(3));
+	for (int i = 0; i < 4; i++)
+	{
+		m_receptors[i] = new Receptor();
+		m_receptors[i]->InitSelf(i, GetXForColumn(i));
+	}
 
 	// Init music
 	m_songMusic = new sf::Music();
@@ -174,34 +200,11 @@ void GameplayScene::InitScene()
 
 void GameplayScene::UnloadScene()
 {
-	// Delete heap-allocated notes
-	int sz = m_notes.size();
-	for (int i = sz-1; i > 0; i--)
-	{
-		delete m_notes[i];
-		m_notes.erase(m_notes.begin() + i);
-	}
-	// Delete heap-allocated longNotes
-	sz = m_longNotes.size();
-	for (int i = sz - 1; i > 0; i--)
-	{
-		delete m_longNotes[i];
-		m_longNotes.erase(m_longNotes.begin() + i);
-	}
-
-	// Delete heap objects
-	delete m_backgroundTexture;
-	delete m_backgroundSprite;
-	delete m_playBox;
-	delete m_comboText;
-	delete m_pauseMenu;
-	delete m_healthBar;
-	delete m_progressBar;
-	if (m_leaveReason == eLeaveSongReason::quit)
-		delete m_score;
-
 	// Reset vars
 	m_paused = false;
+
+	if (m_leaveReason == eLeaveSongReason::quit)
+		delete m_score;
 }
 
 void GameplayScene::UpdateScene()
@@ -261,10 +264,8 @@ void GameplayScene::RenderScene(sf::RenderWindow * window)
 	window->draw(*m_playBox);
 
 	// Receptors
-	m_receptorLeft->RenderSelf(window);
-	m_receptorLeftMid->RenderSelf(window);
-	m_receptorRightMid->RenderSelf(window);
-	m_receptorRight->RenderSelf(window);
+	for (int i = 0; i < 4; i++)
+		m_receptors[i]->RenderSelf(window);
 
 	// Notes
 	for (int i = 0; i < m_notes.size(); i++)
@@ -392,34 +393,34 @@ void GameplayScene::UpdateReceptorInput()
 	if (Input::W.m_keyPressed)
 	{
 		CheckForHit(0);
-		m_receptorLeft->Pressed();
+		m_receptors[0]->Pressed();
 	}
 	if (Input::E.m_keyPressed)
 	{
 		CheckForHit(1);
-		m_receptorLeftMid->Pressed();
+		m_receptors[1]->Pressed();
 	}
 	if (Input::I.m_keyPressed)
 	{
 		CheckForHit(2);
-		m_receptorRightMid->Pressed();
+		m_receptors[2]->Pressed();
 	}
 	if (Input::O.m_keyPressed)
 	{
 		CheckForHit(3);
-		m_receptorRight->Pressed();
+		m_receptors[3]->Pressed();
 	}
 
 
 	// Receptor released
 	if (Input::W.m_keyReleased)
-		m_receptorLeft->Released();
+		m_receptors[0]->Released();
 	if (Input::E.m_keyReleased)
-		m_receptorLeftMid->Released();
+		m_receptors[1]->Released();
 	if (Input::I.m_keyReleased)
-		m_receptorRightMid->Released();
+		m_receptors[2]->Released();
 	if (Input::O.m_keyReleased)
-		m_receptorRight->Released();
+		m_receptors[3]->Released();
 }
 
 void GameplayScene::UpdateSongAndNotes()
@@ -624,6 +625,8 @@ void GameplayScene::CheckForHit(int column)
 	float greatWindow = Settings::GreatWindow();
 	float missWindow = Settings::MissWindow();
 
+	bool noteHit = true;
+
 	if (timingDisparity < perfectWindow)
 	{
 		noteRegistered = true;
@@ -636,8 +639,14 @@ void GameplayScene::CheckForHit(int column)
 	}
 	else if (timingDisparity < missWindow)
 	{
+		noteHit = false;
 		noteRegistered = true;
 		NoteMissed();
+	}
+
+	if (noteHit)
+	{
+		m_receptors[column]->NoteHit();
 	}
 
 	if (noteRegistered)

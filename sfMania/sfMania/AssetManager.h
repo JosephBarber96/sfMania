@@ -37,11 +37,7 @@ enum eTexture
 
 enum eAnimation
 {
-	hit_receptor_left = 0,
-	hit_receptor_down = 1,
-	hit_receptor_up = 2,
-	hit_receptor_right = 3,
-
+	receptor_hit = 0,
 	health_bar = 10,
 };
 
@@ -107,14 +103,13 @@ public:
 	static sf::SoundBuffer* GetSound(eSound sound);
 	static sf::Texture* GetTexture(eTexture texture);
 	static sf::Texture* GetNoteTexture(int column);
-	static Animation* GetAnimation(eAnimation anim);
+	static AnimationAsset* GetAnimation(eAnimation anim);
 
 private:
 
 	void LoadFonts();
 	void LoadSounds();
 	void LoadSprites();
-	void LoadAnimations();
 
 	static AssetManager* instance;
 
@@ -122,7 +117,7 @@ private:
 	std::map<eFont, sf::Font*> m_fonts;
 	std::map<eSound, sf::SoundBuffer*> m_sounds;
 	std::map<eTexture, sf::Texture*> m_textures;
-	std::map<eAnimation, Animation*> m_animations;
+	std::map<eAnimation, AnimationAsset> m_animations;
 
 	// Asset info 
 	AssetInfo m_assetInfo;

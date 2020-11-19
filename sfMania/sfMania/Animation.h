@@ -16,14 +16,17 @@ public:
 	void OnSetPosition();
 
 	// Animation
-	void SetupAnimation(AnimationAsset asset);
-	void Play();
+	void SetupAnimation(AnimationAsset* asset);
+	void Play(bool loop = false);
+	void Stop();
 	void SetSize(int width, int height);
 	void SetColour(sf::Color c);
 
 private:
+
 	// Value vars
 	bool m_isPlaying;
+	bool m_loop;
 	int m_currentFrame;
 	sf::IntRect m_currentTextureRect;
 	float m_elapsedFrameTime;

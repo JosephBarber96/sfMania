@@ -18,6 +18,7 @@ class Measure;
 class PauseMenu;
 class HealthBar;
 class ProgressBar;
+class Animation;
 enum eHit;
 
 enum eLeaveSongReason
@@ -111,13 +112,8 @@ private:
 	Score* m_score;
 	HealthBar* m_healthBar;
 	ProgressBar* m_progressBar;
-
-
 	// Receptors
-	Receptor * m_receptorLeft;
-	Receptor * m_receptorLeftMid;
-	Receptor * m_receptorRightMid;
-	Receptor * m_receptorRight;
+	std::array<Receptor*, 4> m_receptors;
 
 	// Notes
 	int m_currentNoteIndex;
