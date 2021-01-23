@@ -29,6 +29,7 @@ void Song::LoadAllSongs()
 	for (std::string filename : songList)
 	{
 		Song* song = Utility::LoadSongFromFile(filename);
+		song->SortStepmaps();
 		AllSongs.push_back(song);
 	}
 }
@@ -44,6 +45,25 @@ void Song::AddStepmap(StepMap* stepMap)
 void Song::AddBpm(BPM* bpm)
 {
 	m_BPMs.push_back(bpm);
+}
+
+void Song::SortStepmaps()
+{
+	int count = m_stepMaps.size();
+
+	for (int i = 0; i < count - 1; i++)
+	{
+		for (int j = i + 1; j < count; j++)
+		{
+			// J After I but J < I : Swap
+			if (m_stepMaps[j]->m_numericalDifficulty < m_stepMaps[i]->m_numericalDifficulty)
+			{
+				StepMap* temp = m_stepMaps[j];
+				m_stepMaps[j] = m_stepMaps[i];
+				m_stepMaps[i] = temp;
+			}
+		}
+	}
 }
 
 

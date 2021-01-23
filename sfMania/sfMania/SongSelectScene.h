@@ -7,11 +7,18 @@
 class SongInfoBox;
 class SongPanel;
 class BeatmapDifficultyPanel;
+class DifficultySelectMenu;
 
 enum eScrollDir
 {
-	up,
-	down
+	back,
+	forward
+};
+
+enum eSelectMode
+{
+	songSelectMode,
+	difficultySelectMode
 };
 
 class SongSelectScene : public Scene
@@ -39,7 +46,6 @@ private:
 	std::vector<SongPanel*> m_songPanels;
 	std::vector<BeatmapDifficultyPanel*> m_difficultyPanels;
 	SongInfoBox* m_songInfoBox;
-	sf::Texture* m_backgroundTexture;
 	sf::Sprite* m_backgroundSprite;
 	sf::Texture* m_bannerTexture;
 	sf::Sprite* m_bannerSprite;
@@ -48,7 +54,13 @@ private:
 	Song* m_currentSong;
 	int m_currentSongIndex;
 	int m_targetScrollIndex;	// Index we will be at after scrolling
+
+	// Difficulty
 	int m_currentDifficultyIndex;
+	DifficultySelectMenu* m_diffSelectMenu;
+
+	// Mode 
+	eSelectMode m_mode;
 
 	// Scrolling
 	bool m_scrolling;
@@ -59,10 +71,11 @@ private:
 	void Scroll(eScrollDir dir);
 	void OnScrollFinished();
 	void LoadInfoForSong();
+	void SetMode(eSelectMode mode);
 
 	// Static const
 	static const int BANNER_WIDTH = 400;
-	static const int SONG_INFOBOX_HEIGHT = 205;
+	static const int SONG_INFOBOX_HEIGHT = 150;
 	static const int SONG_PANEL_WIDTH = 400;
 	static const int SONG_PANEL_HEIGHT = 100;
 };

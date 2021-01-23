@@ -32,7 +32,9 @@ enum eTexture
 
 	main_menu_bg = 100,
 	main_menu_arrow_left = 101,
-	main_menu_arrow_right = 102
+	main_menu_arrow_right = 102,
+
+	song_select_background = 201,
 };
 
 enum eAnimation

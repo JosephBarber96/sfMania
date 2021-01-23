@@ -109,6 +109,10 @@
       {
          "filepath":"Assets\\Sprites\\MenuArrowRight.png",
          "texture":102
+      },
+	        {
+         "filepath":"Assets\\Sprites\\songSelectBackground.png",
+         "texture":201
       }
    ]
 }

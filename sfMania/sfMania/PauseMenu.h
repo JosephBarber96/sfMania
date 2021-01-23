@@ -15,12 +15,15 @@ public:
 	PauseMenu();
 	~PauseMenu();
 
-	void Init();
+	// GameObject
 	void Update();
 	void RenderSelf(sf::RenderWindow* window);
 
 	// MediaBox
 	void OnMediaBoxSetPosition();
+
+	// PauseMenu
+	void Init();
 	ePauseOptions CurrentOption() const { return (ePauseOptions)m_currentOption; }
 
 private:

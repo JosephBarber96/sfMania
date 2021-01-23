@@ -90,7 +90,7 @@ namespace Utility
 		text->setPosition(x, y);
 	}
 
-	sf::Color UnhighlightedColour() { return sf::Color(0, 0, 0, 225); }
+	sf::Color UnhighlightedColour() { return sf::Color(0, 0, 0, 128); }
 	sf::Color HighlightedColour() { return sf::Color(255, 255, 255, 128); }
 
 	sf::Color Lerp(sf::Color a, sf::Color b, float t)
@@ -235,6 +235,7 @@ namespace Utility
 						readingNoteData = true;
 						notesMetadataCounter = 0;
 						stepMap = new StepMap();
+						measure = new Measure();
 						continue;
 					}
 				}
@@ -552,5 +553,22 @@ namespace Utility
 		float offset = std::stof(offsetString);
 
 		return offset;
+	}
+
+	sf::Color GetDifficultyColour(int difIndex)
+	{
+		switch (difIndex)
+		{
+		case 0:
+			return sf::Color::Green;
+		case 1:
+			return sf::Color::Cyan;
+		case 2:
+			return sf::Color::Red;
+		default:
+			return sf::Color(128, 0, 128); // Purple
+		}
+
+
 	}
 }

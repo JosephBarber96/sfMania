@@ -1,3 +1,5 @@
+#include <string>
+
 #include "BeatmapDifficultyPanel.h"
 
 #include "StepMap.h"
@@ -7,13 +9,13 @@
 
 BeatmapDifficultyPanel::BeatmapDifficultyPanel()
 {
-	m_difficultyText = new sf::Text();
-	Utility::SetupText(m_difficultyText, eFont::small, "", 25, sf::Color::White, sf::Color::Black, 2, 5, 5);
+	m_difficultyText = sf::Text();
+	Utility::SetupText(&m_difficultyText, eFont::small, "", TEXT_SIZE, sf::Color::White, sf::Color::Black, 2, 5, 5);
 }
 
 BeatmapDifficultyPanel::~BeatmapDifficultyPanel()
 {
-	delete m_difficultyText;
+
 }
 
 
@@ -27,7 +29,7 @@ void BeatmapDifficultyPanel::RenderSelf(sf::RenderWindow* window)
 {
 	MediaBox::RenderSelf(window);
 
-	window->draw(*m_difficultyText);
+	window->draw(m_difficultyText);
 }
 
 
@@ -39,7 +41,7 @@ void BeatmapDifficultyPanel::RenderSelf(sf::RenderWindow* window)
 
 void BeatmapDifficultyPanel::OnMediaBoxSetPosition()
 {
-	m_difficultyText->setPosition(m_x + 5, m_y + 5);
+	PositionText();
 }
 
 
@@ -51,20 +53,30 @@ void BeatmapDifficultyPanel::OnMediaBoxSetPosition()
 
 void BeatmapDifficultyPanel::SetInfo(StepMap* stepmap)
 {
-	std::string difficulty = "";
-	difficulty.append(std::to_string(stepmap->m_numericalDifficulty));
-	difficulty.append(" ");
-	difficulty.append(stepmap->m_difficultyName);
+	m_difficultyText.setString(std::to_string(stepmap->m_numericalDifficulty));
+	PositionText();
+}
 
-	m_difficultyText->setString(difficulty);
+void BeatmapDifficultyPanel::SetDifficultyColour(sf::Color col)
+{
+	m_colour = col;
 }
 
 void BeatmapDifficultyPanel::Highlight()
 {
-	MediaBox::SetFillColour(Utility::HighlightedColour());
+	m_colour.a = 255;
+	MediaBox::SetFillColour(m_colour);
 }
 
 void BeatmapDifficultyPanel::UnHighlight()
 {
-	MediaBox::SetFillColour(Utility::UnhighlightedColour());
+	m_colour.a = 128;
+	MediaBox::SetFillColour(m_colour);
+}
+
+void BeatmapDifficultyPanel::PositionText()
+{
+	int x = m_x + (m_box.getGlobalBounds().width * 0.5f) - (m_difficultyText.getGlobalBounds().width * 0.5f);
+	int y = m_y + (m_box.getGlobalBounds().height * 0.5f) - (m_difficultyText.getGlobalBounds().height);
+	m_difficultyText.setPosition(x, y);
 }

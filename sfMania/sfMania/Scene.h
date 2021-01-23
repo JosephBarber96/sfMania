@@ -16,7 +16,7 @@ class Scene
 {
 public:
 	Scene();
-	~Scene();
+	virtual ~Scene();
 
 	virtual void InitScene() = 0;
 	virtual void UnloadScene() = 0;

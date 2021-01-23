@@ -19,8 +19,8 @@ Receptor::Receptor()
 
 Receptor::~Receptor()
 {
-	delete m_textureDown;
-	delete m_textureUp;
+	//delete m_textureDown;
+	//delete m_textureUp;
 	delete m_sprite;
 	delete m_hitAnim;
 }

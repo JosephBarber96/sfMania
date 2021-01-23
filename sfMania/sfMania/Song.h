@@ -27,6 +27,7 @@ public:
 	// Adding info
 	void AddStepmap(StepMap* stepMap);
 	void AddBpm(BPM* bpm);
+	void SortStepmaps();
 
 	// Getting Info
 	int StepmapCount() const;

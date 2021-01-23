@@ -19,12 +19,6 @@ public:
 	void UpdateInformation(Song* song);
 
 private:
-	sf::Text* m_artistHeading;
-	sf::Text* m_artist;
-
-	sf::Text* m_songHeading;
-	sf::Text* m_song;
-
-	sf::Text* m_bpmHeading;
-	sf::Text* m_bpm;
+	sf::Text* m_songText;
+	sf::Text* m_bpmText;
 };

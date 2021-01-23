@@ -37,4 +37,5 @@ namespace Utility
 	std::string HandleBackground(std::string line, std::string fileDirectory);
 	std::string HandleBanner(std::string line, std::string fileDirectory);
 	float HandleOffset(std::string line);
+	sf::Color GetDifficultyColour(int difIndex);
 };

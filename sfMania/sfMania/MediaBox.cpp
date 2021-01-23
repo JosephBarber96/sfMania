@@ -39,7 +39,8 @@ void MediaBox::OnSetPosition()
 
 void MediaBox::SetOutlineColour(sf::Color col)
 {
-	m_box.setOutlineColor(col);
+	m_outlineCol = col;
+	m_box.setOutlineColor(m_outlineCol);
 }
 
 void MediaBox::SetOutlineThickness(float thickness)
@@ -49,10 +50,13 @@ void MediaBox::SetOutlineThickness(float thickness)
 
 void MediaBox::SetFillColour(sf::Color col)
 {
-	m_box.setFillColor(col);
+	m_fillCol = col;
+	m_box.setFillColor(m_fillCol);
 }
 
 void MediaBox::SetSize(int width, int height)
 {
+	m_width = width;
+	m_height = height;
 	m_box.setSize(sf::Vector2f(width, height));
 }
