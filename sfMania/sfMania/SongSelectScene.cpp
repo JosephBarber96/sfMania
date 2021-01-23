@@ -16,6 +16,7 @@
 #include "AudioManager.h"
 #include "AssetManager.h"
 #include "DifficultySelectPannel.h"
+#include "SceneChangeArgs.h"
 
 SongSelectScene::SongSelectScene()
 {
@@ -53,7 +54,7 @@ SongSelectScene::~SongSelectScene()
 // Scene
 //--------------------------
 
-void SongSelectScene::InitScene()
+void SongSelectScene::InitScene(SceneChangeArgs* args)
 {
 	int outline_thickness = 3;
 	int gap = 5;
@@ -177,8 +178,10 @@ void SongSelectScene::UpdateScene()
 		// Select
 		if (Input::Enter.m_keyPressed)
 		{
-			GameManager::SetChosenSong(m_currentSong, m_diffSelectMenu->ChosenDifficulty());
-			GameManager::ChangeScene(eScenes::playingSong);
+			SongSceneChangeArgs* args = new SongSceneChangeArgs();
+			args->chosenSongIndex = m_currentSongIndex;
+			args->chosenDifficultyIndex = m_diffSelectMenu->ChosenDifficulty();
+			GameManager::ChangeScene(eScenes::playingSong, args);
 		}
 	}
 }
@@ -337,9 +340,7 @@ void SongSelectScene::LoadInfoForSong()
 
 			diffXPos = x;
 		}
-
 		diffYPos = m_songInfoBox->GetY() + m_songInfoBox->GetHeight() + 10;
-
 		panel->SetPosition(diffXPos, diffYPos);
 	}
 	m_difficultyPanels[0]->Highlight();

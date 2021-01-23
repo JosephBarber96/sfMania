@@ -12,13 +12,15 @@ enum eScenes
 	resultsScreen,
 };
 
+struct SceneChangeArgs;
+
 class Scene
 {
 public:
 	Scene();
 	virtual ~Scene();
 
-	virtual void InitScene() = 0;
+	virtual void InitScene(SceneChangeArgs* args) = 0;
 	virtual void UnloadScene() = 0;
 
 	virtual void UpdateScene() = 0;

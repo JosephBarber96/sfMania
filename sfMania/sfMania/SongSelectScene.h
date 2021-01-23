@@ -28,7 +28,7 @@ public:
 	~SongSelectScene();
 
 	// Scene
-	void InitScene();
+	void InitScene(SceneChangeArgs* args);
 	void UnloadScene();
 
 	void UpdateScene();

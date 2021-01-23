@@ -25,6 +25,7 @@
 #include "Receptor.h"
 #include "Note.h"
 #include "LongNote.h"
+#include "SceneChangeArgs.h"
 
 // INFORMATION
 /*
@@ -57,7 +58,6 @@ GameplayScene::GameplayScene()
 	m_longNotes = std::vector<LongNote*>();
 	m_activeLongNotes = std::array<LongNote*, 4>();
 	m_receptors = std::array<Receptor*, 4>();
-
 }
 
 
@@ -90,6 +90,7 @@ GameplayScene::~GameplayScene()
 	delete m_pauseMenu;
 	delete m_healthBar;
 	delete m_progressBar;
+	delete m_score;
 }
 
 
@@ -99,16 +100,21 @@ GameplayScene::~GameplayScene()
 // Scene
 //--------------------------
 
-void GameplayScene::InitScene()
+void GameplayScene::InitScene(SceneChangeArgs* args)
 {
+	// Args 
+	SongSceneChangeArgs* newArgs = static_cast<SongSceneChangeArgs*>(args);
+
 	// Init vars
 	m_score = new Score();
 	m_paused = false;
 
-	// Get song
-	m_currentSong = GameManager::GetCurrentSong();
+	// Get song + stepmap
+	m_songIndex = newArgs->chosenSongIndex;
+	m_diffIndex = newArgs->chosenDifficultyIndex;
+	m_currentSong = Song::GetSong(newArgs->chosenSongIndex);
+	m_stepMap = m_currentSong->GetStepmap(newArgs->chosenDifficultyIndex);
 
-	// Init receptors
 	for (int i = 0; i < 4; i++)
 	{
 		m_receptors[i] = new Receptor();
@@ -202,9 +208,6 @@ void GameplayScene::UnloadScene()
 {
 	// Reset vars
 	m_paused = false;
-
-	if (m_leaveReason == eLeaveSongReason::quit)
-		delete m_score;
 }
 
 void GameplayScene::UpdateScene()
@@ -318,7 +321,6 @@ void GameplayScene::Play()
 	m_curLineIndex = 0;
 	m_currentBpm = 0;
 	m_nextLineDelay = 0;
-	m_stepMap = m_currentSong->GetStepmap(GameManager::GetCurrentChosenDifficulty());
 
 	// Init var info
 	m_curBeatLine = 0;
@@ -760,15 +762,24 @@ void GameplayScene::LeaveScene(eLeaveSongReason reason)
 		// Song Select
 		GameManager::ChangeScene(eScenes::songSelect);
 	}
-	// Fail
-	if (reason == eLeaveSongReason::dead)
+	// Results (fail or pass)
+	if (reason == eLeaveSongReason::dead || reason == eLeaveSongReason::songEnd)
 	{
-		m_score->SetFailed();
-		ResultsScene::LoadSceneResults(m_score);
-	}
-	else if (reason == eLeaveSongReason::songEnd)
-	{
-		ResultsScene::LoadSceneResults(m_score);
+		if (reason == eLeaveSongReason::dead)
+		{
+			m_score->SetFailed();
+		}
+		
+		ResultsSceneChangeArgs* args = new ResultsSceneChangeArgs();
+		args->chosenSongIndex = m_songIndex;
+		args->chosenDifficultyIndex = m_diffIndex;
+		args->perfectNotes = m_score->GetPerfectNotes();
+		args->greatNotes = m_score->GetGreatNotes();
+		args->missNotes = m_score->GetMissNotes();
+		args->combo = m_score->GetCombo();
+		args->maxCombo = m_score->GetMaxCombo();
+		args->grade = m_score->CalculateGrade();
+		GameManager::ChangeScene(eScenes::resultsScreen, args);
 	}
 }
 

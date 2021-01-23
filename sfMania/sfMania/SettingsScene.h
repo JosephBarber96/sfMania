@@ -8,7 +8,7 @@ public:
 	SettingsScene();
 	~SettingsScene();
 
-	void InitScene();
+	void InitScene(SceneChangeArgs* args);
 	void UnloadScene();
 
 	void UpdateScene();

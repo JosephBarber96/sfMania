@@ -1,5 +1,4 @@
 #pragma once
-#include <thread>
 #include <chrono>
 #include <vector>
 #include <array>
@@ -39,7 +38,7 @@ public:
 	const int HEALTH_GAIN = 1;
 
 	// Scene
-	void InitScene();
+	void InitScene(SceneChangeArgs* args);
 	void UnloadScene();
 	void UpdateScene();
 	void UpdateSceneTransition(float normalized);
@@ -78,10 +77,6 @@ private:
 	// Song components
 	Song* m_currentSong;
 	sf::Music* m_songMusic;
-
-	// Threads
-	std::thread m_noteThread;
-	std::thread m_musicThread;
 
 	// Song logic
 	bool m_songPlaying;
@@ -137,5 +132,9 @@ private:
 	bool m_expandCombo;
 	float m_elapsedComboExpandTime;
 	float m_targetComboExpandTime;
+
+	// Info 
+	int m_songIndex;
+	int m_diffIndex;
 };
 

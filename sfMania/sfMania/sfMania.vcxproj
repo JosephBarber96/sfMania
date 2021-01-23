@@ -185,6 +185,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="ResultsScene.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneChangeArgs.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="SettingsScene.h" />

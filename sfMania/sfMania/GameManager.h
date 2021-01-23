@@ -6,6 +6,7 @@
 enum eScenes;
 class Scene;
 class Song;
+struct SceneChangeArgs;
 
 class GameManager
 {
@@ -21,14 +22,12 @@ public:
 	void Run();
 
 	// Static behaviour
-	static void SetChosenSong(Song* song, int difficulty);
 	static void ChangeScene(eScenes p_newScene);
+	static void ChangeScene(eScenes p_newScene, SceneChangeArgs* p_args);
 	static void ReloadScene();
 
 	// Getters
 	static float DeltaTime() { return m_deltaTime; }
-	static Song* GetCurrentSong() { return instance->m_currentlyChosenSong; }
-	static int GetCurrentChosenDifficulty() { return instance->m_currentlyChosenDifficulty; }
 
 private:
 
@@ -45,7 +44,7 @@ private:
 	// Internal update/render logic
 	void SelfUpdate();
 	void SelfRender();
-	void SceneChange(eScenes p_newScene, bool reload = false);
+	void DoSceneChangeInternal(eScenes p_newScene, bool reload = false);
 
 	// Update scene changing
 	void UpdateSceneTransition();
@@ -57,10 +56,9 @@ private:
 
 	// Game-State
 	Scene* m_currentScene;
-	Song* m_currentlyChosenSong;
-	int m_currentlyChosenDifficulty;
 
 	// Scene changing
+	SceneChangeArgs* m_sceneChangeArgs;
 	eScenes m_scene;
 	eScenes m_nextScene;
 	bool m_changingScene;

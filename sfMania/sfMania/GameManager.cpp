@@ -16,6 +16,7 @@
 #include "SongSelectScene.h"
 #include "GameplayScene.h"
 #include "ResultsScene.h"
+#include "SceneChangeArgs.h"
 
 // Statics
 float GameManager::m_deltaTime;
@@ -180,33 +181,31 @@ void GameManager::SelfRender()
 
 
 //---------------------------------------------
-// Setting currently selected song
-//---------------------------------------------
-
-void GameManager::SetChosenSong(Song* song, int difficulty)
-{
-	instance->m_currentlyChosenSong = song;
-	instance->m_currentlyChosenDifficulty = difficulty;
-}
-
-
-
-
-//---------------------------------------------
 // Change scene
 //---------------------------------------------
 
 void GameManager::ChangeScene(eScenes p_newScene)
 {
-	instance->SceneChange(p_newScene);
+	delete instance->m_sceneChangeArgs;
+
+	instance->m_sceneChangeArgs = nullptr;
+	instance->DoSceneChangeInternal(p_newScene);
+}
+
+void GameManager::ChangeScene(eScenes p_newScene, SceneChangeArgs* p_args)
+{
+	delete instance->m_sceneChangeArgs;
+
+	instance->m_sceneChangeArgs = p_args;
+	instance->DoSceneChangeInternal(p_newScene);
 }
 
 void GameManager::ReloadScene()
 {
-	instance->SceneChange(instance->m_scene, true);
+	instance->DoSceneChangeInternal(instance->m_scene, true);
 }
 
-void GameManager::SceneChange(eScenes p_newScene, bool reload)
+void GameManager::DoSceneChangeInternal(eScenes p_newScene, bool reload)
 {
 	if (m_changingScene) { return; }
 	if (m_scene == p_newScene && !reload) { return; }
@@ -276,7 +275,7 @@ void GameManager::OnSceneChanged()
 		m_currentScene = new ResultsScene();
 		break;
 	}
-	m_currentScene->InitScene();
+	m_currentScene->InitScene(m_sceneChangeArgs);
 
 	std::cout << "Now in scene: " << m_scene << std::endl;
 }

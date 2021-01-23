@@ -11,18 +11,13 @@ public:
 	~ResultsScene();
 
 	// Scene
-	void InitScene();
+	void InitScene(SceneChangeArgs* args);
 	void UnloadScene();
 	void UpdateScene();
 	void UpdateSceneTransition(float normalized);
 	void RenderScene(sf::RenderWindow * window);
 
-	// Results Scene
-	static void LoadSceneResults(Score* score);
-
 private:
-	static Score* score;
-
 	sf::Texture *m_backgroundTexture;
 	sf::Sprite *m_backgroundSprite;
 

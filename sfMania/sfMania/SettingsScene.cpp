@@ -21,7 +21,7 @@ SettingsScene::~SettingsScene()
 // Scene
 //--------------------------
 
-void SettingsScene::InitScene()
+void SettingsScene::InitScene(SceneChangeArgs* args)
 {
 	m_selectedOption = eOptions::resolution;
 	m_selectedResolution = Settings::Resolution();

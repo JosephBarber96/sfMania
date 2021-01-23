@@ -42,7 +42,7 @@ void Score::SetFailed()
 	m_failed = true;
 }
 
-eGrade Score::CalculateScore() const
+eGrade Score::CalculateGrade() const
 {
 	if (m_failed)
 		return eGrade::F;

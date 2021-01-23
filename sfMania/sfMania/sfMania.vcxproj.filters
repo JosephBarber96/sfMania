@@ -221,5 +221,8 @@
     <ClInclude Include="DifficultyPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneChangeArgs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

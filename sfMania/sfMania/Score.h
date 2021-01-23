@@ -29,7 +29,7 @@ public:
 	void AddGreat();
 	void AddMiss();
 	void SetFailed();
-	eGrade CalculateScore() const;
+	eGrade CalculateGrade() const;
 
 	// Getters
 	int GetCombo() const { return m_combo; }

@@ -10,7 +10,7 @@ public:
 	MainMenuScene();
 	~MainMenuScene();
 
-	void InitScene();
+	void InitScene(SceneChangeArgs* args);
 	void UnloadScene();
 
 	void UpdateScene();

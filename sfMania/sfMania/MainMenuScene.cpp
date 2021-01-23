@@ -23,7 +23,7 @@ MainMenuScene::~MainMenuScene()
 	delete m_menuArrowLeftSprite;
 }
 
-void MainMenuScene::InitScene()
+void MainMenuScene::InitScene(SceneChangeArgs* args)
 {
 	// Menu background
 
