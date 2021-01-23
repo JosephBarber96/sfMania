@@ -18,6 +18,7 @@ public:
 	// GameObject
 	void Update();
 	void RenderSelf(sf::RenderWindow* window);
+	void SetActive(bool active);
 
 	// MediaBox
 	void OnMediaBoxSetPosition();

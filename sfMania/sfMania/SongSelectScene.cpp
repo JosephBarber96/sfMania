@@ -105,6 +105,9 @@ void SongSelectScene::InitScene(SceneChangeArgs* args)
 
 	// Load song info
 	LoadInfoForSong();
+
+	// Turn off diff select menu
+	m_diffSelectMenu->SetActive(false);
 }
 
 void SongSelectScene::UnloadScene()
@@ -325,9 +328,7 @@ void SongSelectScene::LoadInfoForSong()
 				x += size * (difference - 1);
 				x += padding * (difference - 1);
 			}
-
 			diffXPos = x;
-
 		}
 		// Odd
 		else
@@ -364,7 +365,6 @@ void SongSelectScene::SetMode(eSelectMode mode)
 	switch (m_mode)
 	{
 	case eSelectMode::songSelectMode:
-		m_diffSelectMenu->SetActive(false);
 		break;
 	case eSelectMode::difficultySelectMode:
 		m_diffSelectMenu->SetActive(true);

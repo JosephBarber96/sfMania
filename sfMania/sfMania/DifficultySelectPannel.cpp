@@ -21,6 +21,12 @@ DifficultySelectMenu::~DifficultySelectMenu()
 	}
 }
 
+void DifficultySelectMenu::SetActive(bool active)
+{
+	GameObject::SetActive(active);
+	m_currentDifficulty = 0;
+}
+
 void DifficultySelectMenu::Update()
 {
 	if (Input::Up.m_keyPressed && m_currentDifficulty > 0)
@@ -55,6 +61,7 @@ void DifficultySelectMenu::OnMediaBoxSetPosition()
 void DifficultySelectMenu::Init(Song* song)
 {
 	m_song = song;
+	m_currentDifficulty = 0;
 
 	// Background dim
 	MediaBox::SetSize(Settings::WindowX(), Settings::WindowY());
@@ -91,7 +98,35 @@ void DifficultySelectMenu::Init(Song* song)
 
 		// Pos
 		int difX = (Settings::WindowX() * 0.5f) - (difSize.x * 0.5f);
-		int difY = menuY + (padding * i) + (difSize.y * i);
+		int difY;
+		if (numDifficulties % 2 == 0)
+		{
+			int half = (numDifficulties / 2);
+			int index = i + 1;
+			int difference = abs(half - index);
+			if (index <= half)
+			{
+				difference += 1;
+				difY = (Settings::WindowY() * 0.5f);
+				difY += difSize.y * -difference;
+				difY += padding * -difference;
+
+			}
+			else
+			{
+				difY = (Settings::WindowY() * 0.5f);
+				difY += difSize.y * (difference - 1);
+				difY += padding * (difference - 1);
+			}
+		}
+		else
+		{
+			int middle = int(numDifficulties / 2) + 1;
+			int indexDifference = (i + 1) - middle;
+			difY = (Settings::WindowY() * 0.5f) - (difSize.y / 2);
+			difY -= difSize.y * indexDifference;
+			difY -= padding * (indexDifference + 1);
+		}	
 		panel->SetPosition(difX, difY);
 
 		// Colour

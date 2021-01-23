@@ -21,7 +21,7 @@ public:
 	void SetPositionNormalized(float x, float y);
 	virtual void OnSetPosition();
 
-	void SetActive(bool active);
+	virtual void SetActive(bool active);
 	bool IsActive() const;
 
 protected:
