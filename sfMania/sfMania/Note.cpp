@@ -10,19 +10,15 @@
 #include "Maths.h"
 #include "GameplayScene.h"
 
-GameplayScene* Note::gameplayScene;
 
 Note::Note()
 {
-	m_sprite = new sf::Sprite();
-
-	m_elapsedFallTime = 0.0f;
-	m_targetFallTime = Settings::FallTime();
+	m_noteType = eNoteType::simple;
 }
 
 Note::~Note()
 {
-	delete m_sprite;
+	
 }
 
 
@@ -46,8 +42,8 @@ void Note::Update()
 	// Note missed
 	if ((m_elapsedFallTime - m_targetFallTime) > Settings::MissWindow())
 	{
-		EndDrop();
 		Note::gameplayScene->AlertNoteMissed();
+		EndNode();
 	}
 }
 
@@ -64,53 +60,17 @@ void Note::OnSetPosition()
 }
 
 
-
-
 //--------------------------
-// Note
+// BaseNote
 //--------------------------
 
-// Public
-
-void Note::InitSceneRef(GameplayScene* scene)
+void Note::NoteHit()
 {
-	Note::gameplayScene = scene;
+	EndNode();
 }
 
-void Note::BeginDrop(int x, int column)
-{
-	m_currentColumn = column;
-
-	// Set sprite texture
-	m_sprite->setTexture(*AssetManager::GetNoteTexture(column));
-
-	// Elapsed time
-	m_elapsedFallTime = 0.0f;
-
-	// Get bounds
-	m_width = m_sprite->getGlobalBounds().width;
-	m_height = m_sprite->getGlobalBounds().height;
-
-	// Y positions
-	m_startY = 0 - m_height;
-	m_targetY = Receptor::GetReceptorY();
-
-	// Set pos
-	SetPosition(x, m_startY);
-
-	// Activate
-	Activate();
-}
-
-void Note::EndDrop()
-{
-	m_active = false;
-}
-
-// Protected
 
 void Note::Activate()
 {
-	m_active = true;
-	OnActivate();
+	BaseNote::Activate();
 }

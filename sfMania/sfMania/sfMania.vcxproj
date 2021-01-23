@@ -127,6 +127,7 @@
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="BaseNote.cpp" />
     <ClCompile Include="BPM.cpp" />
     <ClCompile Include="DifficultyPanel.cpp" />
     <ClCompile Include="DifficultySelectPannel.cpp" />
@@ -163,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="BaseNote.h" />
     <ClInclude Include="BPM.h" />
     <ClInclude Include="DifficultyPanel.h" />
     <ClInclude Include="DifficultySelectPannel.h" />

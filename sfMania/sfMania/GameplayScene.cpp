@@ -470,7 +470,7 @@ void GameplayScene::UpdateSongAndNotes()
 
 					// Long-note head
 				case '2':
-					// FGor now, treat rolls as long notes
+					// For now, treat rolls as long notes
 				case '4':
 					m_activeLongNotes[i] = DropLongNote(i);
 					break;
@@ -544,8 +544,6 @@ void GameplayScene::UpdateSongAndNotes()
 		m_elapsedSongTime += delta;
 	}
 
-	
-
 	m_initialNoteDelay -= delta;
 	m_initialSongDelay -= delta;
 }
@@ -597,7 +595,7 @@ void GameplayScene::CheckForHit(int column)
 	float timing_window = 0.1f; // 1/10th of a second
 
 	// Get the lowest-down note in the given column
-	Note * furthestNote = nullptr;
+	BaseNote * furthestNote = nullptr;
 	float furthestFallTime;
 	for (Note * note : m_notes)
 	{
@@ -615,6 +613,23 @@ void GameplayScene::CheckForHit(int column)
 			}
 		}
 	}
+	for (LongNote* ln : m_longNotes)
+	{
+		if (ln->IsActive() && ln->Column() == column)
+		{
+			if (furthestNote == nullptr)
+			{
+				furthestNote = ln;
+				furthestFallTime = ln->ElapsedFallTime();
+			}
+			else if (ln->ElapsedFallTime() > furthestFallTime)
+			{
+				furthestNote = ln;
+				furthestFallTime = ln->ElapsedFallTime();
+			}
+		}
+	}
+
 
 	// None found?
 	if (furthestNote == nullptr) { return; }
@@ -652,7 +667,9 @@ void GameplayScene::CheckForHit(int column)
 	}
 
 	if (noteRegistered)
-		furthestNote->EndDrop();
+	{
+		furthestNote->NoteHit();
+	}
 }
 
 void GameplayScene::NoteHit(eHit hit)

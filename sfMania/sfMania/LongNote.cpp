@@ -6,15 +6,19 @@
 #include "Maths.h"
 #include "Receptor.h"
 #include "GameplayScene.h"
+#include "Settings.h"
 
 LongNote::LongNote()
 	:
-	Note()
+	BaseNote()
 {
 	m_longBar = new sf::RectangleShape();
 	m_longBar->setOutlineColor(sf::Color(255, 255, 255, 255));
 	m_longBar->setOutlineThickness(2);
 	m_longBar->setFillColor(sf::Color(20, 20, 20));
+
+	m_noteType = eNoteType::longNote;
+	m_noteSuccessfullyHeld = false;
 }
 
 
@@ -42,9 +46,17 @@ void LongNote::Update()
 	float y = Maths::Lerp(m_startY, m_targetY, normalized);
 	SetPosition(m_x, y);
 
+	// Note missed
+	if (!m_noteSuccessfullyHeld && !m_noteRegisteredMiss && (m_elapsedFallTime - m_targetFallTime) > Settings::MissWindow())
+	{
+		m_noteRegisteredMiss = true;
+		Note::gameplayScene->AlertNoteMissed();
+	}
+
+	// End the Long Note
 	if (m_readyToEnd)
 	{
-		EndDrop();
+		EndNode();
 	}
 }
 
@@ -60,8 +72,7 @@ void LongNote::OnSetPosition()
 {
 	// Sprite
 	float spriteY = Maths::Clamp(m_y, 0, Receptor::GetReceptorY());
-	m_sprite->setPosition(m_x, spriteY);
-		
+	m_sprite->setPosition(m_x, spriteY);		
 
 	// Long note
 	switch (m_longNoteMode)
@@ -114,13 +125,28 @@ void LongNote::OnSetPosition()
 
 
 //--------------------------
-// LongNote
+// BaseNote
 //--------------------------
 
-void LongNote::OnActivate()
+void LongNote::NoteHit()
 {
+	m_noteSuccessfullyHeld = true;
+}
+
+void LongNote::Activate()
+{
+	BaseNote::Activate();
+	m_noteSuccessfullyHeld = false;
+	m_noteRegisteredMiss = false;
 	SetLongnoteMode(eLongNoteMode::expanding);
 }
+
+
+
+
+//--------------------------
+// LongNote
+//--------------------------
 
 void LongNote::SetLongnoteMode(eLongNoteMode newMode)
 {

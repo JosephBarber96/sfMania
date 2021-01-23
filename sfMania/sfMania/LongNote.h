@@ -10,7 +10,7 @@ enum eLongNoteMode
 	shrinking,		// 3
 };
 
-class LongNote : public Note
+class LongNote : public BaseNote
 {
 public:
 	LongNote();
@@ -21,13 +21,18 @@ public:
 	void RenderSelf(sf::RenderWindow * window);
 	void OnSetPosition();
 
+	// BaseNote
+	void NoteHit();
+
 	// LongNote
 	void EndTail();
 
 protected:
 
-	// Longnote
-	virtual void OnActivate();
+	// BaseNote
+	void Activate();
+
+	// LongNote
 	void SetLongnoteMode(eLongNoteMode newMode);
 
 	sf::RectangleShape* m_longBar;
@@ -38,4 +43,7 @@ protected:
 	float m_elapsedShrinkTime;
 	float m_targetShrinkTime;
 	bool m_readyToEnd;
+
+	bool m_noteSuccessfullyHeld;
+	bool m_noteRegisteredMiss;
 };
